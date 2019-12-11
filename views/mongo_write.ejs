@@ -105,7 +105,7 @@
             <h3 style="text-align: center;
             font-weight: bold;"><%= title %></h3>
 
-            <form action="/mongo/write" method="post">
+            <form action="/mongo/write" method="post" onsubmit="submitContents(this);">
                 <table class="table table-bordered">
                     <tr>
                            
@@ -130,7 +130,7 @@
                         font-family: 'Nanum Barun Gothic';
                         background: #fbfbfb;
                         color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
-                        <td><textarea name="content" id="content" cols="30" rows="10" style="width:766px; height:412px; display:none;" required></textarea></td>
+                        <td><textarea name="content" id="content" cols="30" rows="10" style="width:766px; height:412px; display:none;"></textarea></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -177,6 +177,7 @@
                 });
 
                 function submitContents(elClickedObj) {
+                    debugger;
                     oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
 
                     // 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("content").value를 이용해서 처리하면 됩니다.

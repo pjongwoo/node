@@ -58,7 +58,10 @@ router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
     boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.render("mongo_read", {title: '게시판 리스트', row: row});
+        board.save(function(err){
+            if(err) res.status(500).json({error: 'failed to update'});
+        });
+        res.render("mongo_read", {title: '게시판 보기', row: row});
     });
 });
 
@@ -108,15 +111,37 @@ router.post('/delete', function(req, res, next) {
 router.get('/page', function(req, res, next) {
     res.redirect('/mongo/page/1');
 });
+function getFormatDate(date){
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    var hour = date.getHours()
+    hour = hour >= 10 ? hour : '0' + hour;
+    var min = date.getMinutes();
+    min = min >= 10 ? min : '0' + min;
+    var second = date.getSeconds();
+    second = second >= 10 ? second : '0' + second;
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '-' + month + '-' + day + " " + hour + ':' + min + ':' + second;
+}
 
 router.get('/page/:page', function(req, res, next) {
     var page = req.params.page;
 
     boardVo.find({flag:true},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
+        for(var i = 0 ; i<rows.length ; i++){
+            rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
+            rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
+            console.log(getFormatDate(new Date(rows[i].regdate)));
+            console.log(rows[i].modidate);
+        }
         res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true});
     });
 });
+
+
 
 module.exports = router;
 

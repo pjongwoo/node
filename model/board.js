@@ -10,6 +10,8 @@ var boardSchema = new Schema({
     idx : { type: String, required: true },
     hit : { type: Number, required: true },
     flag : { type: Boolean, default:false},
+    stregdate: { type: String   },
+    stmodidate: { type: String },
 });
 
 module.exports = mongoose.model('board', boardSchema);

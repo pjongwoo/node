@@ -9,85 +9,91 @@
     <link ref="stylesheet" href="/stylesheets/style.css"/>
     <link rel="stylesheet" type="text/css" href="/css/common.css">
     <link rel="stylesheet" type="text/css" href="/css/contents.css">
+    <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= title %></title>
-    <!-- 부트스트랩 추가 :홍준 -->   
+    <!-- 부트스트랩 추가 :홍준 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <link ref="stylesheet" href="/stylesheets/style.css"/>
 
     <header>
-			<%- include('header'); %>
-	</header>
+        <%- include('header'); %>
+    </header>
 </head>
 <body>
-    <div id ='container'><!-- body 시작-->
-        <div class='content'>
-            <div style="display: flex;margin-bottom: 10px;justify-content: space-between;">
-                <p style="font-size: 15px;font-weight: bold;">
-                     <%= title %>
-                </p>
-                <button type="button" class="btn btn-primary" style="z-index: 9999;">
-                    <a style=" 
-                    text-decoration: none;
-                    color: #fff;"
-                    href="/admin/write">
-                    글쓰기
-                    </a>
-                </button>
-             </div>
-             <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">작성자</th>
-                        <th scope="col">제목</th> 
-                        <th scope="col">조회수</th>
-                        <th scope="col">수정일</th>
-                        <th scope="col">등록일</th>
-                    </tr>
-                </thead>
-                <%
-                for(var i=(page*page_num)-page_num; i<(page*page_num) ; i++){
-                if(i>length){
-                    i++;
-                }else{
-                    var data = rows[i];
-                %>
-                <tr>
-                    <td scope="row"><%= data.name %></td>
-                    <td><a href="/admin/read/<%= data._id %>"><%= data.title %></a></td>
-                    <td><%= data.hit %></td>
-                    <td><%= data.modidate %></td>
-                    <td><%= data.regdate %></td>
-                </tr>
-                <%
-                }
-                }
-                %>
-                <tr>
-                    <td colspan="6">
-                        <%
-                        for(var j=0 ; j<rows.length / page_num ; j++){
-                        %>
-                            [<a href="/admin/page/<%= j+1 %>"><%= j+1 %></a>]
-                        <%
-                        }
-                        %>
-                    </td>
-                </tr>
-            </table>
+<div id ='container' style=" height: 95%;"><!-- body 시작-->
+    <div style="position: relative;
+        margin: 0 auto;
+        width: 80%;
+        top: 50%;">
+        <div style="display: flex;margin-bottom: 10px;justify-content: space-between;">
+            <p style="font-size: 15px;font-weight: bold;">
+                <%= title %>
+            </p>
+<!--            <button type="button" class="btn btn-primary" style="z-index: 9999;">-->
+<!--                <a style="-->
+<!--                text-decoration: none;-->
+<!--                color: #fff;"-->
+<!--                   href="/admin/write">-->
+<!--                    글쓰기-->
+<!--                </a>-->
+<!--            </button>-->
         </div>
-    </div><!-- body 종료-->
-
-</div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col" style="text-align:center;padding: 1%;">작성자</th>
+                <th scope="col" style="text-align: center;padding: 1%;">제목</th>
+                <th scope="col" style="text-align: center;padding: 1%;">조회수</th>
+                <th scope="col" style="text-align: center;padding: 1%;">수정일</th>
+                <th scope="col" style="text-align: center;padding: 1%;">등록일</th>
+            </tr>
+            </thead>
+            <tbody style="text-align:center;">
+            <%
+            for(var i=(page*page_num)-page_num; i<(page*page_num) ; i++){
+            if(i>length){
+                i++;
+            }else{
+                var data = rows[i];
+            %>
+            <tr>
+                <td scope="row"><%= data.name %></td>
+                <td><a href="/admin/read/<%= data._id %>"><%= data.title %></a></td>
+                <td><%= data.hit %></td>
+                <td><%= data.stmodidate %></td>
+                <td><%= data.stregdate %></td>
+            </tr>
+            <%
+            }
+            }
+            %>
+            <tr>
+                <td colspan="6">
+                    <%
+                    for(var j=0 ; j<rows.length / page_num ; j++){
+                    %>
+                        [<a href="/admin/page/<%= j+1 %>"><%= j+1 %></a>]
+                    <%
+                    }
+                    %>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div><!-- body 종료-->
 <!-- Footer -->
-<footer id="footer" style="    text-align: center;">
+<footer id="footer" style="text-align: center;padding: 1%;">
     <p>&copy; Untitled. All rights reserved. Design: <a href="http://templated.co">TEMPLATED</a>. Demo Images: <a href="http://unsplash.com">Unsplash</a>.</p>
 </footer>
 <!-- Footer -->
+</div>
+
 </body>
 </html>
