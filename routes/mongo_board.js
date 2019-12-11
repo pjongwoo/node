@@ -58,7 +58,8 @@ router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
     boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'database failure'});
-        board.save(function(err){
+        row.hit += 1;
+        row.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
         });
         res.render("mongo_read", {title: '게시판 보기', row: row});

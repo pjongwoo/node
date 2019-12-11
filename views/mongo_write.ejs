@@ -139,7 +139,7 @@
                             flex: 1;
                             justify-content: center;
                             "> 
-                            <button type="submit" class="btn btn-dark" style="    margin-right: 10px;"> <b> 글쓰기 </b>  </button>
+                            <button type="submit" class="btn btn-primary" style="    margin-right: 10px;"> <b> 글쓰기 </b>  </button>
                            
                             <button type="button" class="btn btn-warning"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page">목록</a></button>
                            
@@ -177,7 +177,6 @@
                 });
 
                 function submitContents(elClickedObj) {
-                    debugger;
                     oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);	// 에디터의 내용이 textarea에 적용됩니다.
 
                     // 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("content").value를 이용해서 처리하면 됩니다.

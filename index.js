@@ -88,7 +88,7 @@ app.post('/login', function(req, res) {
         console.log(user.ID);
         req.session.name =  user.NAME;
         req.session.idx =  user.IDX;
-        return res.redirect('/main')
+        return res.redirect('/mongo/page/1');
       }
         
     });//query
