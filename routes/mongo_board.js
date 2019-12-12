@@ -29,7 +29,7 @@ function getCurrentDate(){
 router.get('/list', function(req, res, next){
     boardVo.find({flag:true},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.render("mongo_list", {title: '게시판 리스트', rows: rows});
+        res.render("mongo_list", {title: '게시판 리스트', rows: rows,name:req.session.name});
     });
 });
 
@@ -62,7 +62,7 @@ router.get('/read/:id', function(req, res, next) {
         row.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
         });
-        res.render("mongo_read", {title: '게시판 보기', row: row});
+        res.render("mongo_read", {title: '게시판 보기', row: row,name:req.session.name});
     });
 });
 
@@ -138,7 +138,7 @@ router.get('/page/:page', function(req, res, next) {
             console.log(getFormatDate(new Date(rows[i].regdate)));
             console.log(rows[i].modidate);
         }
-        res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true});
+        res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
     });
 });
 

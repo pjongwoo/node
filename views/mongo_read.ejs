@@ -131,7 +131,7 @@
                         font-family: 'Nanum Barun Gothic';
                         background: #fbfbfb;
                         color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
-                        <td><%= row.content %></td>
+                        <td><div id="txt_content"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -158,5 +158,13 @@
     <p>&copy; Untitled. All rights reserved. Design: <a href="http://templated.co">TEMPLATED</a>. Demo Images: <a href="http://unsplash.com">Unsplash</a>.</p>
 </footer> -->
 <!-- Footer -->
+<script>
+    (function($){
+        var text = "<%= row.content %>";
+        text = text.replace(/&lt;/gi, "<");
+        text = text.replace(/&gt;/gi, ">");
+        $("#txt_content").html(text);
+    })(jQuery);
+</script>
 </body>
 </html>

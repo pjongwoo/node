@@ -33,7 +33,7 @@ router.get('/list', function(req, res, next){
             rows[i].regdate = getFormatDate(rows[i].regdate);
             rows[i].modidate = getFormatDate(rows[i].modidate);
         }
-        res.render("admin_list", {title: '미승인 게시판 리스트', rows: rows});
+        res.render("admin_list", {title: '미승인 게시판 리스트', rows: rows,name:req.session.name});
     });
 });
 
@@ -61,7 +61,7 @@ router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
     boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.render("admin_read", {title: '게시판 보기', row: row});
+        res.render("admin_read", {title: '게시판 보기', row: row,name:req.session.name});
     });
 });
 
@@ -132,7 +132,7 @@ router.get('/page/:page', function(req, res, next) {
             console.log(getFormatDate(new Date(rows[i].regdate)));
             console.log(rows[i].modidate);
         }
-        res.render("admin_page", {title: '미승인 게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true});
+        res.render("admin_page", {title: '미승인 게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
     });
 });
 
