@@ -135,8 +135,8 @@ router.get('/page/:page', function(req, res, next) {
         for(var i = 0 ; i<rows.length ; i++){
             rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
             rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
-            console.log(getFormatDate(new Date(rows[i].regdate)));
-            console.log(rows[i].modidate);
+            //console.log(getFormatDate(new Date(rows[i].regdate)));
+            console.log("test "+ rows[i].modidate);
         }
         res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true});
     });
