@@ -92,6 +92,7 @@ router.get("/404", function(req, res){
     res.render('404');
 });
 
+//ID 중복체크 API
 router.post('/check', function(req, res) {
   console.log(req.body);
   var id = req.body.test;
