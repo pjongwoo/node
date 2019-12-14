@@ -92,6 +92,27 @@ router.get("/404", function(req, res){
     res.render('404');
 });
 
+//ID 중복체크 API
+router.post('/check', function(req, res) {
+  console.log(req.body);
+  var id = req.body.test;
+  var sql = 'SELECT * FROM  nodedb.T_RECIPE_MEMBER where ID=?';
+  conn.query(sql, [id],  function(err, results){
+    if(err){
+    }
+    //DB 정보가 없을경우.
+    if(!results[0]){
+       // res.render("signup", {check: '1'});
+        res.json("no");
+    }else{
+       // res.render("signup", {check: '2'});
+        res.json("ok");
+    }
+      
+  });//query
+});
+  
+
 //회원가입 API
 router.post('/signup', function(req, res) {
     var id = req.body.inputID;
@@ -118,6 +139,7 @@ router.post('/signup', function(req, res) {
         }
     });
 });
+
 
 //이미지 가자요기
 router.get('/uploads/:url1/:url2', function(req, res) {
