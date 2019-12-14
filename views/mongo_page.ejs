@@ -7,6 +7,9 @@
     <meta name="author" content="">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= title %></title>
+    <style>
+        .img-responsive{width:200px;}
+    </style>
     <%- include('head'); %>
 </head>
 <body id="page-top">
@@ -19,11 +22,9 @@
         width: 80%;
         top: 50%;">
          <div style="display: flex;margin-bottom: 10px;justify-content: space-between;">
-            <p style="font-size: 15px;font-weight: bold;">
-                 <%= title %>
-            </p>
+             <h3 class="text-center"><%= title %></h3>
             <button type="button" class="btn btn-primary" style="z-index: 9999;">
-                <a style=" 
+                <a style="
                 text-decoration: none;
                 color: #fff;"
                 href="/mongo/write">
@@ -34,8 +35,9 @@
          <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th scope="col" style="text-align:center;padding: 1%;">작성자</th>
-                    <th scope="col" style="text-align: center;padding: 1%;">제목</th> 
+                    <th scope="col" style="text-align: center;padding: 1%;">작성자</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">대표이미지</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">제목</th>
                     <th scope="col" style="text-align: center;padding: 1%;">조회수</th>
                     <th scope="col" style="text-align: center;padding: 1%;">수정일</th>
                     <th scope="col" style="text-align: center;padding: 1%;">등록일</th>
@@ -48,14 +50,14 @@
                     i++;
                 }else{
                     var data = rows[i];
-                    console.log(data);
                 %>
                 <tr>
-                    <td scope="row"><%= data.name %></td>
-                    <td><a href="/mongo/read/<%= data._id %>"><%= data.title %></a></td>
-                    <td><%= data.hit %></td>
-                    <td><%= data.stmodidate %></td>
-                    <td><%= data.stregdate %></td>
+                    <td class="align-middle" scope="row"><%= data.name %></td>
+                    <td><img class="img-responsive align-middle" src="/<%= data.mainImg %>"/></td>
+                    <td class="align-middle"><a href="/mongo/read/<%= data._id %>"><%= data.title %></a></td>
+                    <td class="align-middle"><%= data.hit %></td>
+                    <td class="align-middle"><%= data.stmodidate %></td>
+                    <td class="align-middle"><%= data.stregdate %></td>
                 </tr>
                 <%
                 }
@@ -63,13 +65,28 @@
                 %>
                 <tr>
                     <td colspan="6">
-                        <%
-                        for(var j=0 ; j<rows.length / page_num ; j++){
-                        %>
-                            [<a href="/mongo/page/<%= j+1 %>"><%= j+1 %></a>]
-                        <%
-                        }
-                        %>
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="/mongo/page/1" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <%
+                                for(var j=0 ; j<rows.length / page_num ; j++){
+                                %>
+                                    <li <%if(page == j+1){%> class="active" <%}%>><a href="/mongo/page/<%= j+1 %>"><%= j+1 %></a></li>
+                                <%
+                                }
+                                %>
+                                <li>
+                                    <a href="/mongo/page/<%= rows.length / page_num  %>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
                     </td>
                 </tr>
             </tbody>

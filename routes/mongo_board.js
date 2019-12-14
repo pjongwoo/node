@@ -45,12 +45,12 @@ db.once('open', function(){
 const readFIle = path => {
     fs.readFile(__dirname + path, "utf8", (err, data) => {
         if (err) {
-            console.log(err.stack);
+            // console.log(err.stack);
             return;
         }
-        console.log(data.toString());
+        // console.log(data.toString());
     });
-    console.log("Program Ended");
+    // console.log("Program Ended");
 };
 
 function getFormatDate(date){
@@ -72,19 +72,36 @@ router.get('/page', function(req, res, next) {
     res.redirect('/mongo/page/1');
 });
 
+var _promise = function(item){
+    return new Promise(function(resolve, reject){
+        boardImgVo.findOne({uid:item.id}, function (err, boardImg) {
+            if(err) return reject(Error("실패!!"));
+            console.log(boardImg);
+            if(boardImg == null) return resolve("");
+
+            resolve(boardImg.path ? boardImg.path : "");
+        }).sort('-num');
+    });
+}
+
+async function aa(item){
+    await boardImgVo.findOne({uid:item.id}, function (err, boardImg) {
+        if(err) return res.status(500).send({error: 'boardImg database failure'});
+        if(boardImg == null) return "";
+        return boardImg.path;
+    }).sort('-num');
+}
 
 router.get('/page/:page', function(req, res, next) {
     var page = req.params.page;
 
-    boardVo.find({},function(err, rows){
+     boardVo.find({},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
         for(var i = 0 ; i<rows.length ; i++){
             rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
             rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
-            //console.log(getFormatDate(new Date(rows[i].regdate)));
-            console.log("test "+ rows[i].modidate);
         }
-        res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+        res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
     }).sort('-regdate');
 });
 
@@ -108,7 +125,6 @@ router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
 
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'board database failure = '+err});
-        console.log("게시글 등록 완료!");
 
         for(var i=0 ; i<req.files.length ; i++){
             var img_datas = new boardImgVo();
@@ -122,6 +138,11 @@ router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
                 if(err) return res.status(500).send({error: 'boardImg database failure = '+err});
             })
         }
+
+        datas.mainImg = req.files[req.files.length-1].path;
+        datas.save(function(err){
+            if(err) return res.status(500).send({error: 'board database failure = '+err});
+        });
         req.session.boardId = null;
         res.send("<script>alert('등록이 완료되었습니다.'); location.href='/mongo/page/1'; </script>");
         // res.redirect('/mongo/page/1');
@@ -211,6 +232,17 @@ router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
                             if(err) return res.status(500).send({error: 'boardImg database failure = '+err});
                         })
                     }
+                }
+                if(newFile != 0){
+                    board.mainImg = req.files[newFile-1].path;
+                    board.save(function(err){
+                        if(err) return res.status(500).send({error: 'board database failure = '+err});
+                    });
+                }else{
+                    board.mainImg = imgRows[req.body.recpDtlConts.length-1].path;
+                    board.save(function(err){
+                        if(err) return res.status(500).send({error: 'board database failure = '+err});
+                    });
                 }
 
             }).sort('num');
