@@ -1,1 +1,7 @@
+html, body{height:100%;}
+
+.wrap{min-height:100%; margin:120px auto -150px;}
+.footer_area{height:374px; margin-top:374px;}
+
+
 .navbar + div{margin-top:120px;}
