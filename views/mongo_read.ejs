@@ -105,8 +105,10 @@
             <h3 style="text-align: center;
             font-weight: bold;"><%= title %></h3>
 
-            <form action="/mongo/update" method="post" onsubmit="submitContents(this);">
+            <form action="/mongoup/write" method="post" name="upForm">
                 <input type="hidden" name="id" value="<%= row._id %>">
+                <input type="hidden" name="name" value="<%=row.name%>">
+                
                 <table class="table table-bordered">
                     <tr>
 
@@ -141,7 +143,9 @@
                             justify-content: center;
                             ">
                                 <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
-
+                                <% if(row1.userId != session.name){ %>
+                                    <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
+                                <%  } %>
                             </div>
                         </td>
                     </tr>

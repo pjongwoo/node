@@ -10,10 +10,28 @@ var path = require('path');
 var boardMongoRouter = require('./routes/mongo_board');
 var boardAdminRouter = require('./routes/admin_board');
 var sampleRouter = require('./routes/sample');
+var boardUpMongoRouter = require('./routes/mongo_boardUp');
 
+var boardVo = require('./model/board');
+
+//2019.12.14 몽고db 추가
+var mongoose = require('mongoose');
+
+
+mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 //express 생성
 var app = express();
+
+//2019.12.14 몽고 디비 생성
+var db = mongoose.connection;
+mongoose.connect('mongodb://211.239.124.237:19614/node', { useNewUrlParser: true, useUnifiedTopology: true  } );
+db.on('error', console.error);
+db.once('open', function(){
+    // CONNECTED TO MONGODB SERVER
+    console.log("Connected to mongod server!");
+});
 
 //DB 접속 정보 생성
 var dbOptions = dbConfig;
@@ -34,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/mongo',boardMongoRouter);
 app.use('/admin',boardAdminRouter);
 app.use('/sample', sampleRouter);
+app.use('/mongoup',boardUpMongoRouter);
 
 // 세션값으로 페이지 이동
 app.get('/', function (req, res) {
@@ -57,11 +76,20 @@ app.get('/logout', function(req, res){
   });
 });
 
-//main 이동
+//2019.12.14 조회수로 게시판 조회 후 main 이동
 app.get("/main", function(req, res){
   console.log("세션 생성 " + req.session.name);
   console.log("세션 생성 " + req.session.idx);
-  res.render("main", {name:req.session.name});
+  
+  boardVo.find({hit:{$gt:1}},function(err, rows){
+    if(err) return res.status(500).send({error: 'database failure'});
+    for(var i = 0 ; i<rows.length ; i++){
+        //console.log(getFormatDate(new Date(rows[i].regdate)));
+        console.log("Main 데이터 확인 "+ rows[i].hit);
+    }
+    res.render("main", {title: '메인페이지', rows: rows, length:rows.length});  
+  });
+  
   
 });
 
@@ -88,7 +116,7 @@ app.post('/login', function(req, res) {
         console.log(user.ID);
         req.session.name =  user.NAME;
         req.session.idx =  user.IDX;
-        return res.redirect('/mongo/page/1');
+        return res.redirect('/main');
       }
         
     });//query

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var boardVo = require('../model/board');
+var boardUpVo = require('../model/boardup');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
@@ -25,52 +25,45 @@ function getCurrentDate(){
     var milliseconds = date.getMilliseconds();
     return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
 }
-
+/*
 router.get('/list', function(req, res, next){
     boardVo.find({flag:true},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.render("mongo_list", {title: '게시판 리스트', rows: rows,name:req.session.name});
+        res.render("mongo_list", {title: '게시판 리스트', rows: rows});
     });
 });
-
+*/
+/*
 router.get('/write', function(req, res, next) {
     res.render('mongo_write', {title: "게시판 글 쓰기", name:req.session.name});
 });
+*/
 
 router.post('/write', function(req, res, next) {
-    var datas = new boardVo();
-    datas.name = req.body.name;
-    datas.title = req.body.title;
-    datas.content = req.body.content;
-    datas.idx = req.session.idx;
-    datas.hit = 0;
+    var datas = new boardUpVo();
+    datas.userId = req.session.name;
+    datas.contentId = req.body.id;
+
 
 
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'database failure = '+err});
-        res.send("<script>alert('관리자 승인이 되면 등록됩니다.'); location.href = '/mongo/page/1';</script>");
+        res.send("<script>alert('추천되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
         // res.redirect('/mongo/page/1');
     });
 
 });
-
+/*
 router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
-    console.log(req.session.name);
-     boardVo.findOne({_id:req.params.id}, function(err, row){
+    boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'database failure'});
         row.hit += 1;
         row.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
         });
-        boardUpVo.findOne({contentId:req.params.id, userId:req.session.name}, function(err, row1){
-            if(err) return res.status(500).send({error: 'database failure'});
-            res.render("mongo_read", {title: '게시판 보기', row: row, row1:row1, session:req.session});
-        });
-
-
+        res.render("mongo_read", {title: '게시판 보기', row: row});
     });
-
 });
 
 router.post('/update', function(req, res, next) {
@@ -100,25 +93,7 @@ router.post('/update', function(req, res, next) {
 
     });
 });
-
-router.post('/delete', function(req, res, next) {
-    boardVo.findOne({_id:req.body.id}, function(err, board){
-        if(err) return res.status(500).json({ error: 'database failure' });
-        if(!board) return res.status(404).json({ error: 'board not found' });
-        if(req.session.idx != board.idx){
-            res.send("<script>alert('글쓴이가 아닙니다.'); location.href = '/mongo/page/1';</script>");
-            return;
-        }
-        board.deleteOne(function(err){
-            if(err) console.err("err : "+err);
-            res.redirect('/mongo/page/1');
-        });
-    });
-});
-
-router.get('/page', function(req, res, next) {
-    res.redirect('/mongo/page/1');
-});
+*/
 function getFormatDate(date){
     var year = date.getFullYear();              //yyyy
     var month = (1 + date.getMonth());          //M
@@ -133,23 +108,6 @@ function getFormatDate(date){
     day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
     return  year + '-' + month + '-' + day + " " + hour + ':' + min + ':' + second;
 }
-
-router.get('/page/:page', function(req, res, next) {
-    var page = req.params.page;
-
-    boardVo.find({flag:true},function(err, rows){
-        if(err) return res.status(500).send({error: 'database failure'});
-        for(var i = 0 ; i<rows.length ; i++){
-            rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
-            rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
-            //console.log(getFormatDate(new Date(rows[i].regdate)));
-            console.log("test "+ rows[i].modidate);
-        }
-        res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
-    });
-});
-
-
 
 module.exports = router;
 
