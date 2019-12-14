@@ -13,75 +13,59 @@
 <div class="wrap">
     <%- include('menu'); %>
     <div id ='container'><!-- body 시작-->
-        <div style="
-            max-width: 960px;
-            margin: 0 auto;
-            position: relative;
-        ">
-            <h3 style="text-align: center;
-            font-weight: bold;"><%= title %></h3>
-
+        <div class="col-12">
+            <h3 class="text-center"><%= title %></h3>
             <form action="/mongo/write" method="post" enctype="multipart/form-data">
+                <style>
+                    .contsGroup *{vertical-align: middle;}
+                    .recpDtlConts{display: inline-block;}
+                    /*#contsArea .contsGroup {margin-bottom: 10px;}*/
+                    /*#contsArea .contsGroup span , #contsArea .contsGroup input{display: inline-block;}*/
+                    /*#contsArea .contsGroup .txtIdx{width:10%;}*/
+                    /*#contsArea .contsGroup .recpImgFile{width:40%;}*/
+                    /*#contsArea .contsGroup .recpDtlConts{width:40%;}*/
+                    /*#contsArea .contsGroup .btnRemove{width:10%;}*/
+                    .btns{text-align: center; margin-top: 20px;}
+                </style>
                 <table class="table table-bordered">
                     <tr>
-
-                        <td scope="col" style="text-align: center;
-                        font-weight: normal;
-                        font-family: 'Nanum Barun Gothic';
-                        background: #fbfbfb;
-                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 작성자</td>
+                        <td scope="col" class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 작성자</td>
                         <td><%=name%><input type="hidden" name="name" id="name" value="<%=name%>" readonly required/></td>
                     </tr>
                     <tr>
-                        <td style="text-align: center;
-                        font-weight: normal;
-                        font-family: 'Nanum Barun Gothic';
-                        background: #fbfbfb;
-                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
+                        <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
                         <td><input type="text" name="title" id="title" required/></td>
                     </tr>
                     <tr>
-                        <td style="text-align: center;
-                        font-weight: normal;
-                        font-family: 'Nanum Barun Gothic';
-                        background: #fbfbfb;
-                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
+                        <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
                         <td>
                             <div id="contsArea">
-                                <div class="contsGroup">
-                                    <span class="txtIdx">1</span><input type="file" class="recpImgFile" name="recpImgFile" id="recpImgFile1"/><input type="text"  class="recpDtlConts" name="recpDtlConts1" id="recpDtlConts1"/>
+                                <div class="contsGroup" data-index="1">
+                                    <span class="txtIdx text-center col-1">1</span>
+                                    <input type="file" class="recpImgFile col-5" name="recpImgFile"/>
+                                    <textarea class="recpDtlConts col-5 form-control" rows="2"name="recpDtlConts"></textarea>
+                                    <input type="button" class="btnRemove btn btn-danger col-1" value="제거"/>
                                 </div>
                             </div>
                             <div class="btns">
                                 <input type="button" class="btnAdd btn btn-success" value="추가하기"/>
-                                <input type="button" class="btnRemove btn btn-danger" value="제거하기"/>
+
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <div style="
-                            display: flex;
-                            flex: 1;
-                            justify-content: center;
-                            ">
-                                <button type="submit" class="btn btn-primary" style="    margin-right: 10px;"> <b> 글쓰기 </b>  </button>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary"><b>글쓰기</b></button>
 
-                                <button type="button" class="btn btn-warning"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page">목록</a></button>
+                                <a href="/mongo/page"><button type="button" class="btn btn-warning text-white">목록</button></a>
 
                             </div>
                         </td>
                     </tr>
                 </table>
 
-                <style>
-                    #contsArea .contsGroup {margin-bottom: 10px;}
-                    #contsArea .contsGroup span , #contsArea .contsGroup input{display: inline-block;}
-                    #contsArea .contsGroup .txtIdx{width:10%;}
-                    #contsArea .contsGroup .recpImgFile{width:40%;}
-                    #contsArea .contsGroup .recpDtlConts{width:50%;}
-                    .btns{text-align: center; margin-top: 20px;}
-                </style>
+
             </form>
             <script type="text/javascript">
                 var oEditors = [];
@@ -94,17 +78,36 @@
                     var $lastContsGroup = $('.contsGroup').last();
                     var currIdx = Number($lastContsGroup.find('.txtIdx').text()) + 1;
 
+                    $htmlStrObj.attr("data-index",currIdx);
                     $htmlStrObj.find('.txtIdx').text(currIdx);
-                    $htmlStrObj.find('.recpImgFile').text($htmlStrObj.find('.recpImgFile').attr('id', 'recpImgFile' + currIdx));
-                    $htmlStrObj.find('.recpDtlConts').text($htmlStrObj.find('.recpDtlConts').attr('name', 'recpDtlConts' + currIdx));
-                    $htmlStrObj.find('.recpDtlConts').text($htmlStrObj.find('.recpDtlConts').attr('id', 'recpDtlConts' + currIdx));
+                    // $htmlStrObj.find('.recpImgFile').text($htmlStrObj.find('.recpImgFile').attr('id', 'recpImgFile'));
+                    // $htmlStrObj.find('.recpDtlConts').text($htmlStrObj.find('.recpDtlConts').attr('name', 'recpDtlConts'));
+                    // $htmlStrObj.find('.recpDtlConts').text($htmlStrObj.find('.recpDtlConts').attr('id', 'recpDtlConts'));
 
                     $('.contsGroup').last().after($htmlStrObj.clone());
+
+                    // 삭제하기
+                    $('.btnRemove').off('click').on('click',function(){
+                        $(this).parent().remove();
+
+                        $.each($(".contsGroup"), function(index, item){
+                            $(item).attr("data-index",index+1);
+                            $(item).find('.txtIdx').text(index+1);
+                        });
+
+                        // $('.contsGroup').last().remove();
+                    });
                 });
 
                 // 삭제하기
                 $('.btnRemove').click(function(){
-                    $('.contsGroup').last().remove();
+                    $(this).parent().remove();
+
+                    $.each($(".contsGroup"), function(index, item){
+                        console.log(item);
+                    });
+
+                    // $('.contsGroup').last().remove();
                 });
 
             </script>

@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var router = express.Router();
 var mongoose = require('mongoose');
 var boardVo = require('../model/board');
@@ -116,6 +117,15 @@ router.post('/signup', function(req, res) {
             res.redirect('/');
         }
     });
+});
+
+//이미지 가자요기
+router.get('/uploads/:url1/:url2', function(req, res) {
+    fs.readFile(__dirname+'/../uploads/'+req.params.url1 + '/' + req.params.url2, function(err, data){
+        res.writeHead(200, {'Content-Type' : 'text/html'});
+        res.end(data);
+    });
+
 });
 
 module.exports = router;

@@ -1,14 +1,32 @@
 var express = require('express');
+var fs = require('fs');
+var uuid = require('uuid/v1');
 var router = express.Router();
 var mongoose = require('mongoose');
 var boardVo = require('../model/board');
 var boardUpVo = require('../model/boardUp');
+var boardImgVo = require('../model/boardImg');
+
 var multer = require('multer'); // multer모듈 적용 (for 파일업로드)
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+        var boardId = req.session.boardId;
+        try {
+            fs.statSync(__dirname + '/../uploads/'+boardId);
+            console.log('폴더가 있습니다.');
+        }
+        catch (err) {
+            fs.mkdirSync(__dirname + '/../uploads/'+boardId, '0775' ,function(err) {
+                if (err) throw err;
+                console.log('새로운 폴더를 만들었습니다.');
+            });
+        }
+
+        console.log("*****************destination*******************");
+        cb(null, 'uploads/'+boardId); // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
     },
     filename: function (req, file, cb) {
+        console.log("*****************filename*******************");
         cb(null, file.originalname); // cb 콜백함수를 통해 전송된 파일 이름 설정
     }
 });
@@ -23,6 +41,17 @@ db.once('open', function(){
     // CONNECTED TO MONGODB SERVER
     console.log("Connected to mongod server!");
 });
+
+const readFIle = path => {
+    fs.readFile(__dirname + path, "utf8", (err, data) => {
+        if (err) {
+            console.log(err.stack);
+            return;
+        }
+        console.log(data.toString());
+    });
+    console.log("Program Ended");
+};
 
 function getFormatDate(date){
     var year = date.getFullYear();              //yyyy
@@ -60,24 +89,41 @@ router.get('/page/:page', function(req, res, next) {
 });
 
 router.get('/write', function(req, res, next) {
+    req.session.boardId = uuid();
     res.render('mongo_write', {title: "게시판 글 쓰기", name:req.session.name});
 });
 
 router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
-
+    console.log("*****************write*******************");
     console.log(req.files); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
+    console.log(req.body.recpDtlConts);
 
     var datas = new boardVo();
+    datas.id = req.session.boardId;
     datas.name = req.body.name;
     datas.title = req.body.title;
-    datas.content = req.body.content;
     datas.idx = req.session.idx;
     datas.hit = 0;
 
 
     datas.save(function(err){
-        if(err) return res.status(500).send({error: 'database failure = '+err});
-        res.send("<script>alert('관리자 승인이 되면 등록됩니다.'); location.href = '/mongo/page/1';</script>");
+        if(err) return res.status(500).send({error: 'board database failure = '+err});
+        console.log("게시글 등록 완료!");
+
+        for(var i=0 ; i<req.files.length ; i++){
+            var img_datas = new boardImgVo();
+            img_datas.uid = datas.id;
+            img_datas.file = req.files[i].originalname;
+            img_datas.path = req.files[i].path;
+            img_datas.text = req.body.recpDtlConts[i];
+            img_datas.num = i;
+            console.log(img_datas);
+            img_datas.save(function(err){
+                if(err) return res.status(500).send({error: 'boardImg database failure = '+err});
+            })
+        }
+        req.session.boardId = null;
+        res.send("<script>alert('등록이 완료되었습니다.'); location.href='/mongo/page/1'; </script>");
         // res.redirect('/mongo/page/1');
     });
 
@@ -87,15 +133,21 @@ router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
     console.log(req.session.name);
      boardVo.findOne({_id:req.params.id}, function(err, row){
-        if(err) return res.status(500).send({error: 'database failure'});
+        if(err) return res.status(500).send({error: 'board database failure'});
         row.hit += 1;
         row.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
         });
+        var rowUp;
         boardUpVo.findOne({contentId:req.params.id, userId:req.session.name}, function(err, row1){
-            if(err) return res.status(500).send({error: 'database failure'});
-            res.render("mongo_read", {title: '게시판 보기', row: row, row1:row1, session:req.session});
+            if(err) return res.status(500).send({error: 'boardUp database failure'});
+            rowUp = row1;
+
         });
+        boardImgVo.find({uid:row.id}, function(err, imgRows){
+            if(err) return res.status(500).send({error: 'boardImg database failure'});
+            res.render("mongo_read", {title: '게시판 보기', row: row, row1:rowUp, imgRows:imgRows, session:req.session});
+        }).sort('num');
 
 
     });

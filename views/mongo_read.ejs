@@ -52,7 +52,15 @@
                         font-family: 'Nanum Barun Gothic';
                         background: #fbfbfb;
                         color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
-                        <td><div id="txt_content"></td>
+                        <td>
+                            <% for(var i=0; i<imgRows.length ; i++){%>
+                            <div id="txt_content">
+                                <div class="col-1"><%= imgRows[i].num+1 %></div>
+                                <div class="col-5"><img class="img-responsive" src="/<%= imgRows[i].path %>"/></div>
+                                <div class="col-6"><%= imgRows[i].text %></div>
+                            </div>
+                            <%}%>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -62,7 +70,7 @@
                             justify-content: center;
                             ">
                                 <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
-                                <% if(row1.userId != session.name){ %>
+                                <% if(row1 != null && row1.userId != session.name){ %>
                                     <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
                                 <%  } %>
                             </div>
