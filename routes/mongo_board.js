@@ -122,7 +122,6 @@ router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
     datas.idx = req.session.idx;
     datas.hit = 0;
 
-
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'board database failure = '+err});
 
