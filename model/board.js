@@ -13,6 +13,7 @@ var boardSchema = new Schema({
     flag : { type: Boolean, default:false},
     stregdate: { type: String   },
     stmodidate: { type: String },
+    mainImg:{type:String},
 });
 
 module.exports = mongoose.model('board', boardSchema);

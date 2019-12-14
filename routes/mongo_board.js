@@ -72,25 +72,6 @@ router.get('/page', function(req, res, next) {
     res.redirect('/mongo/page/1');
 });
 
-var _promise = function(item){
-    return new Promise(function(resolve, reject){
-        boardImgVo.findOne({uid:item.id}, function (err, boardImg) {
-            if(err) return reject(Error("실패!!"));
-            console.log(boardImg);
-            if(boardImg == null) return resolve("");
-
-            resolve(boardImg.path ? boardImg.path : "");
-        }).sort('-num');
-    });
-}
-
-async function aa(item){
-    await boardImgVo.findOne({uid:item.id}, function (err, boardImg) {
-        if(err) return res.status(500).send({error: 'boardImg database failure'});
-        if(boardImg == null) return "";
-        return boardImg.path;
-    }).sort('-num');
-}
 
 router.get('/page/:page', function(req, res, next) {
     var page = req.params.page;
