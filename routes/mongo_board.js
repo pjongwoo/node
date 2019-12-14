@@ -134,6 +134,7 @@ router.get('/read/:id', function(req, res, next) {
     console.log(req.session.name);
      boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'board database failure'});
+        req.session.boardId = row.id;
         row.hit += 1;
         row.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
@@ -154,14 +155,16 @@ router.get('/read/:id', function(req, res, next) {
 
 });
 
-router.post('/update', function(req, res, next) {
+router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
     const id = req.body.id;
+    var originSize = req.body.originSize;
+    var deleteIndex = req.body.deleteIndex;
     var datas = new boardVo();
     datas.title = req.body.title;
-    datas.content = req.body.content;
     datas.modidate = Date.now(); // 2
+    console.log(req.files);
 
-    boardVo.findOne({_id:req.body.id}, function(err, board){
+    boardVo.findOne({_id:id}, function(err, board){
         if(err) return res.status(500).json({ error: 'database failure' });
         if(!board) return res.status(404).json({ error: 'board not found' });
         if(req.session.idx != board.idx){
@@ -170,11 +173,48 @@ router.post('/update', function(req, res, next) {
         }
 
         if(req.body.title) board.title = req.body.title;
-        if(req.body.content) board.content = req.body.content;
         board.modidate = Date.now();
+
+
+        var deletes = deleteIndex.split(',');
+        if("" != deletes[0]){
+            originSize = originSize-deletes.length;
+            for(var i=0 ; i<deletes.length ; i++){
+                boardImgVo.deleteOne({uid:board.id, num:deletes[i]-1}, function(err){
+                    if(err) console.err("boardImg delete err : "+err);
+                });
+            }
+        }
 
         board.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
+
+            boardImgVo.find({uid:board.id}, function(err, imgRows){
+                if(err) return res.status(500).send({error: 'boardImg database failure'});
+
+                var newFile = 0;
+                for(var i=0 ; i<req.body.recpDtlConts.length ; i++){
+                    if(i < originSize){
+                        imgRows[i].text = req.body.recpDtlConts[i];
+                        imgRows[i].num = i;
+                        imgRows[i].save(function(err){
+                            if(err) res.status(500).json({error: 'boardImg failed to update'});
+                        });
+                    }else{
+                        var img_datas = new boardImgVo();
+                        img_datas.uid = board.id;
+                        img_datas.file = req.files[newFile].originalname;
+                        img_datas.path = req.files[newFile++].path;
+                        img_datas.text = req.body.recpDtlConts[i];
+                        img_datas.num = i;
+                        img_datas.save(function(err){
+                            if(err) return res.status(500).send({error: 'boardImg database failure = '+err});
+                        })
+                    }
+                }
+
+            }).sort('num');
+            req.session.boardId = null;
             // res.redirect('/mongo/read/'+res.req.body.id);
             res.redirect('/mongo/page/1');
         });

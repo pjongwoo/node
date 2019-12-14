@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
-                        <td><input type="text" name="title" id="title" required/></td>
+                        <td><input type="text" class="form-control" name="title" id="title" required/></td>
                     </tr>
                     <tr>
                         <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="btns">
-                                <input type="button" class="btnAdd btn btn-success" value="추가하기"/>
+                                <input type="button" class="btnAdd btn btn-success" value="Step 추가"/>
 
                             </div>
                         </td>
@@ -104,7 +104,8 @@
                     $(this).parent().remove();
 
                     $.each($(".contsGroup"), function(index, item){
-                        console.log(item);
+                        $(item).attr("data-index",index+1);
+                        $(item).find('.txtIdx').text(index+1);
                     });
 
                     // $('.contsGroup').last().remove();
