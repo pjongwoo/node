@@ -8,6 +8,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= title %></title>
     <%- include('head'); %>
+    <style>
+        .txt_head{display:flex;}
+        .txt_content{display: flex; padding:10px 0; -webkit-justify-content: center; justify-content: center; -webkit-align-items: center; align-items: center;}
+        .txt_content > div{}
+        .txt_content img{width: 100%;}
+        .txt_content:nth-child(2n+1){background:#eee;}
+        .txt_content:nth-child(2n){background:#fff;}
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -27,57 +35,51 @@
             <form action="/mongoup/write" method="post" name="upForm">
                 <input type="hidden" name="id" value="<%= row._id %>">
                 <input type="hidden" name="name" value="<%=row.name%>">
-                
-                <table class="table table-bordered">
-                    <tr>
-
-                        <td scope="col" style="text-align: center;
-                        font-weight: normal;
-                        font-family: 'Nanum Barun Gothic';
-                        background: #fbfbfb;
-                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 작성자</td>
-                        <td><%=row.name%></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center;
-                        font-weight: normal;
-                        font-family: 'Nanum Barun Gothic';
-                        background: #fbfbfb;
-                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
-                        <td><%= row.title %></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center;
-                        font-weight: normal;
-                        font-family: 'Nanum Barun Gothic';
-                        background: #fbfbfb;
-                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
-                        <td>
-                            <% for(var i=0; i<imgRows.length ; i++){%>
-                            <div id="txt_content">
-                                <div class="col-1"><%= imgRows[i].num+1 %></div>
-                                <div class="col-5"><img class="img-responsive" src="/<%= imgRows[i].path %>"/></div>
-                                <div class="col-6"><%= imgRows[i].text %></div>
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" >작성자</h3>
+                    </div>
+                    <div class="panel-body">
+                        <%=row.name%>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" >제목</h3>
+                    </div>
+                    <div class="panel-body">
+                        <%= row.title %>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" >조리과정</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="txt_head">
+                            <h6 class="col-1 text-center">번호</h6>
+                            <h6 class="col-6 text-center">사진</h6>
+                            <h6 class="col-5 text-center">설명</h6>
+                        </div>
+                        <% for(var i=0; i<imgRows.length ; i++){%>
+                            <div class="txt_content">
+                                <div class="col-1"><span><%= imgRows[i].num+1 %></span></div>
+                                <div class="col-6"><img class="img-responsive" src="/<%= imgRows[i].path %>"/></div>
+                                <div class="col-5"><span><%= imgRows[i].text %></span></div>
                             </div>
-                            <%}%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div style="
+                        <%}%>
+                    </div>
+                </div>
+                <div style="
                             display: flex;
                             flex: 1;
                             justify-content: center;
                             ">
-                                <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
-                                <% if(row1 != null && row1.userId != session.name){ %>
-                                    <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
-                                <%  } %>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
+                    <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
+                    <% if(row1 != null && row1.userId != session.name){ %>
+                        <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
+                    <%  } %>
+                </div>
             </form>
 
         </div>
