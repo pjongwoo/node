@@ -31,10 +31,7 @@
         ">
             <h3 style="text-align: center;
             font-weight: bold;"><%= title %></h3>
-
-            <form action="/mongoup/write" method="post" name="upForm">
-                <input type="hidden" name="id" value="<%= row._id %>">
-                <input type="hidden" name="name" value="<%=row.name%>">
+            <div class="read_area">
                 <div class="panel panel-default ">
                     <div class="panel-heading">
                         <h3 class="panel-title" >작성자</h3>
@@ -70,16 +67,64 @@
                         <%}%>
                     </div>
                 </div>
-                <div style="
-                            display: flex;
-                            flex: 1;
-                            justify-content: center;
-                            ">
+                <div class="text-center">
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
                     <% if(row1 != null && row1.userId != session.name){ %>
                         <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
                     <%  } %>
+                    <% if(row.name == session.name ){ %>
+                        <a class="btn btn-primary text-white" href="#">수정</a>
+                    <% } %>
                 </div>
+            </div>
+            <form action="/mongoup/write" method="post" name="upForm">
+                <input type="hidden" name="id" value="<%= row._id %>">
+                <input type="hidden" name="name" value="<%=row.name%>">
+                <style>
+                    .contsGroup *{vertical-align: middle;}
+                    .recpDtlConts{display: inline-block;}
+                    /*#contsArea .contsGroup {margin-bottom: 10px;}*/
+                    /*#contsArea .contsGroup span , #contsArea .contsGroup input{display: inline-block;}*/
+                    /*#contsArea .contsGroup .txtIdx{width:10%;}*/
+                    /*#contsArea .contsGroup .recpImgFile{width:40%;}*/
+                    /*#contsArea .contsGroup .recpDtlConts{width:40%;}*/
+                    /*#contsArea .contsGroup .btnRemove{width:10%;}*/
+                    .btns{text-align: center; margin-top: 20px;}
+                </style>
+                <table class="table table-bordered">
+                    <tr>
+                        <td scope="col" class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 작성자</td>
+                        <td><%=row.name%><input type="hidden" name="name" id="name" value="<%=row.name%>" readonly required/></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
+                        <td><input type="text" name="title" id="title" required/><%= row.title %></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
+                        <td>
+                            <div id="contsArea">
+                                <div class="contsGroup" data-index="1">
+                                    <span class="txtIdx text-center col-1">1</span>
+                                    <input type="file" class="recpImgFile col-5" name="recpImgFile"/>
+                                    <textarea class="recpDtlConts col-5 form-control" rows="2"name="recpDtlConts"></textarea>
+                                    <input type="button" class="btnRemove btn btn-danger col-1" value="제거"/>
+                                </div>
+                            </div>
+                            <div class="btns">
+                                <input type="button" class="btnAdd btn btn-success" value="추가하기"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary"><b>글쓰기</b></button>
+                                <a href="/mongo/page"><button type="button" class="btn btn-warning text-white">목록</button></a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </form>
 
         </div>
