@@ -2,7 +2,17 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var boardVo = require('../model/board');
-
+var boardUpVo = require('../model/boardUp');
+var multer = require('multer'); // multer모듈 적용 (for 파일업로드)
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname); // cb 콜백함수를 통해 전송된 파일 이름 설정
+    }
+});
+var upload = multer({ storage: storage });
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
@@ -14,30 +24,49 @@ db.once('open', function(){
     console.log("Connected to mongod server!");
 });
 
-function getCurrentDate(){
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var today = date.getDate();
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
-    var milliseconds = date.getMilliseconds();
-    return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
+function getFormatDate(date){
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    var hour = date.getHours()
+    hour = hour >= 10 ? hour : '0' + hour;
+    var min = date.getMinutes();
+    min = min >= 10 ? min : '0' + min;
+    var second = date.getSeconds();
+    second = second >= 10 ? second : '0' + second;
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '-' + month + '-' + day + " " + hour + ':' + min + ':' + second;
 }
 
-router.get('/list', function(req, res, next){
-    boardVo.find({flag:true},function(err, rows){
+router.get('/page', function(req, res, next) {
+    res.redirect('/mongo/page/1');
+});
+
+
+router.get('/page/:page', function(req, res, next) {
+    var page = req.params.page;
+
+    boardVo.find({},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.render("mongo_list", {title: '게시판 리스트', rows: rows,name:req.session.name});
-    });
+        for(var i = 0 ; i<rows.length ; i++){
+            rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
+            rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
+            //console.log(getFormatDate(new Date(rows[i].regdate)));
+            console.log("test "+ rows[i].modidate);
+        }
+        res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+    }).sort('-regdate');
 });
 
 router.get('/write', function(req, res, next) {
     res.render('mongo_write', {title: "게시판 글 쓰기", name:req.session.name});
 });
 
-router.post('/write', function(req, res, next) {
+router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
+
+    console.log(req.files); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
+
     var datas = new boardVo();
     datas.name = req.body.name;
     datas.title = req.body.title;
@@ -115,40 +144,6 @@ router.post('/delete', function(req, res, next) {
         });
     });
 });
-
-router.get('/page', function(req, res, next) {
-    res.redirect('/mongo/page/1');
-});
-function getFormatDate(date){
-    var year = date.getFullYear();              //yyyy
-    var month = (1 + date.getMonth());          //M
-    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
-    var day = date.getDate();                   //d
-    var hour = date.getHours()
-    hour = hour >= 10 ? hour : '0' + hour;
-    var min = date.getMinutes();
-    min = min >= 10 ? min : '0' + min;
-    var second = date.getSeconds();
-    second = second >= 10 ? second : '0' + second;
-    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-    return  year + '-' + month + '-' + day + " " + hour + ':' + min + ':' + second;
-}
-
-router.get('/page/:page', function(req, res, next) {
-    var page = req.params.page;
-
-    boardVo.find({flag:true},function(err, rows){
-        if(err) return res.status(500).send({error: 'database failure'});
-        for(var i = 0 ; i<rows.length ; i++){
-            rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
-            rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
-            //console.log(getFormatDate(new Date(rows[i].regdate)));
-            console.log("test "+ rows[i].modidate);
-        }
-        res.render("mongo_page", {title: '게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
-    });
-});
-
 
 
 module.exports = router;

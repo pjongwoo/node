@@ -26,16 +26,6 @@ function getCurrentDate(){
     return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
 }
 
-router.get('/list', function(req, res, next){
-    boardVo.find({flag:false},function(err, rows){
-        if(err) return res.status(500).send({error: 'database failure'});
-        for(var i = 0 ; i<rows.length ; i++){
-            rows[i].regdate = getFormatDate(rows[i].regdate);
-            rows[i].modidate = getFormatDate(rows[i].modidate);
-        }
-        res.render("admin_list", {title: '미승인 게시판 리스트', rows: rows,name:req.session.name});
-    });
-});
 
 router.get('/write', function(req, res, next) {
     res.render('admin_write', {title: "게시판 글 쓰기", name:req.session.name});

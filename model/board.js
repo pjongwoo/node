@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 var boardSchema = new Schema({
     name: { type: String, required: true },
     title: { type: String, required: true },
-    content : { type: String, required: true },
     regdate: { type: Date, default: Date.now  },
     modidate: { type: Date, default: Date.now  },
     idx : { type: String, required: true },
