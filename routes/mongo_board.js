@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var boardVo = require('../model/board');
+var boardUpVo = require('../model/boardup');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
@@ -56,14 +57,21 @@ router.post('/write', function(req, res, next) {
 
 router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
-    boardVo.findOne({_id:req.params.id}, function(err, row){
+    console.log(req.session.name);
+     boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'database failure'});
         row.hit += 1;
         row.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
         });
-        res.render("mongo_read", {title: '게시판 보기', row: row});
+        boardUpVo.findOne({contentId:req.params.id, userId:req.session.name}, function(err, row1){
+            if(err) return res.status(500).send({error: 'database failure'});
+            res.render("mongo_read", {title: '게시판 보기', row: row, row1:row1, session:req.session});
+        });
+
+        
     });
+
 });
 
 router.post('/update', function(req, res, next) {

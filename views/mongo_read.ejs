@@ -143,9 +143,9 @@
                             justify-content: center;
                             ">
                                 <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
-                                <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
-
-
+                                <% if(row1.userId != session.name){ %>
+                                    <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
+                                <%  } %>
                             </div>
                         </td>
                     </tr>

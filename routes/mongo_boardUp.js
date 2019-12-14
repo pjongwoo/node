@@ -41,14 +41,14 @@ router.get('/write', function(req, res, next) {
 
 router.post('/write', function(req, res, next) {
     var datas = new boardUpVo();
-    datas.userId = req.body.name;
+    datas.userId = req.session.name;
     datas.contentId = req.body.id;
 
 
 
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'database failure = '+err});
-        res.send("<script>alert('추천되었습니다..'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
+        res.send("<script>alert('추천되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
         // res.redirect('/mongo/page/1');
     });
 
