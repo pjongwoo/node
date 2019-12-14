@@ -14,7 +14,7 @@ var boardUpMongoRouter = require('./routes/mongo_boardUp');
 
 var boardVo = require('./model/board');
 
-//몽고db 추가
+//2019.12.14 몽고db 추가
 var mongoose = require('mongoose');
 
 
@@ -24,6 +24,7 @@ mongoose.set('useFindAndModify', false);
 //express 생성
 var app = express();
 
+//2019.12.14 몽고 디비 생성
 var db = mongoose.connection;
 mongoose.connect('mongodb://211.239.124.237:19614/node', { useNewUrlParser: true, useUnifiedTopology: true  } );
 db.on('error', console.error);
@@ -75,12 +76,10 @@ app.get('/logout', function(req, res){
   });
 });
 
-//main 이동
+//2019.12.14 조회수로 게시판 조회 후 main 이동
 app.get("/main", function(req, res){
   console.log("세션 생성 " + req.session.name);
   console.log("세션 생성 " + req.session.idx);
-  console.log("test");
-
   
   boardVo.find({hit:{$gt:1}},function(err, rows){
     if(err) return res.status(500).send({error: 'database failure'});
