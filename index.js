@@ -10,6 +10,7 @@ var path = require('path');
 var boardMongoRouter = require('./routes/mongo_board');
 var boardAdminRouter = require('./routes/admin_board');
 var sampleRouter = require('./routes/sample');
+var boardUpMongoRouter = require('./routes/mongo_boardUp');
 
 
 //express 생성
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/mongo',boardMongoRouter);
 app.use('/admin',boardAdminRouter);
 app.use('/sample', sampleRouter);
+app.use('/mongoup',boardUpMongoRouter);
 
 // 세션값으로 페이지 이동
 app.get('/', function (req, res) {
