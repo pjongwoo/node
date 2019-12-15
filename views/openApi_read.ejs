@@ -7,22 +7,48 @@
     <meta name="author" content="">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= title %></title>
-    <style>
-        .img-responsive{width:200px;}
-    </style>
     <%- include('head'); %>
-</head>
-<body id="page-top">
-    <div class="wrap">
-    <%- include('menu'); %>
+    <link href="/css/tagit.css" rel="stylesheet">
+    <script src="/js/jquery.tagit.js"></script>
+    <style>
+        .txt_head{display:flex;}
+        .txt_content{display: flex; padding:10px 0; -webkit-justify-content: center; justify-content: center; -webkit-align-items: center; align-items: center;}
+        .txt_content > div{}
+        .txt_content img{width: 100%;}
+        .txt_content:nth-child(2n+1){background:#eee;}
+        .txt_content:nth-child(2n){background:#fff;}
+        .contsGroup *{vertical-align: middle;}
+        .recpDtlConts, .recpImgFile{display: inline-block;}
+        .recpImgFile > img{height:64px;}
+        .btns{text-align: center; margin-top: 20px;}
+        #upForm{display:none;}
+        #languages{width:100%;}
+        .reply-wrapper{margin-top: 30px; }
+        .reply-cnt{color: #376492!important; font-weight: 900;}
+        .reply-wrapper p span{ font-size: 2em;}
+        .reply-input-wrapper{clear: both;height: 60px;}
+        .reply-input-conts{width: 89%; height: inherit; resize: none;}
+        .reply-btn{width: 10%; float: right; height: inherit; word-break:keep-all; background:#376492!important; border-color: #376492!important;}
 
+        .reply-name{margin-right: 20px;}
+        .reply-date{}
+        .reply-group{border-bottom: 1px solid #b4b9bd; padding: 10px;}
+        .reply-conts{margin-top: 10px;}
+    </style>
+</head>
+<div class="wrap">
+    <%- include('menu'); %>
     <div id ='container'><!-- body 시작-->
-        <div style="position: relative;
-        margin: 0 auto;
-        width: 80%;
-        top: 50%;">
-         <div style="display: flex;margin-bottom: 10px;justify-content: space-between;">
-             <h3 class="text-center"><%= title %></h3>
+        <div style="
+            max-width: 960px;
+            margin: 0 auto;
+            /* padding: 10%; */
+            /* padding-top: 75px; */
+            top: 100px;
+            position: relative;
+        ">
+            <h3 style="text-align: center;
+            font-weight: bold;"><%= title %></h3>
 
             <form action="/mongoup/write" method="post" name="upForm">
 
