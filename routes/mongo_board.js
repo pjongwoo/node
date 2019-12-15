@@ -101,6 +101,8 @@ router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
     datas.name = req.body.name;
     datas.title = req.body.title;
     datas.idx = req.session.idx;
+    datas.mainDscrpt = req.body.mainDscrpt;
+    
     var tags = "";
     for(var i=0 ; i<req.body.tag.length ; i++){
         if(i == 0){
@@ -172,8 +174,9 @@ router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
     var datas = new boardVo();
     datas.title = req.body.title;
     datas.modidate = Date.now(); // 2
-    console.log(req.files);
 
+    console.log(req.files);
+    
     boardVo.findOne({_id:id}, function(err, board){
         if(err) return res.status(500).json({ error: 'database failure' });
         if(!board) return res.status(404).json({ error: 'board not found' });
@@ -249,6 +252,7 @@ router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
         });
 
     });
+    
 });
 
 router.post('/delete', function(req, res, next) {

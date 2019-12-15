@@ -58,6 +58,14 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
+                        <h3 class="panel-title" >요리설명</h3>
+                    </div>
+                    <div class="panel-body">
+                        <%= row.mainDscrpt %>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
                         <h3 class="panel-title" >재료</h3>
                     </div>
                     <div class="panel-body">
@@ -112,6 +120,10 @@
                         <td><input type="text" class="form-control" name="title" id="title" value="<%= row.title %>" required/></td>
                     </tr>
                     <tr>
+                        <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 요리설명</td>
+                        <td><textarea class="form-control" name="mainDscrpt" id="mainDscrpt" required><%= row.mainDscrpt %></textarea></td>
+                    </tr>
+                    <tr>
                         <td class="bg-light text-center"><span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 재료</td>
                         <td>
                             <ul id="languages" class="fake-input" tabindex="1">
@@ -157,7 +169,7 @@
     </div><!-- body 종료-->
     <script type="text/javascript">
         var oEditors = [];
-
+        
         var $htmlStrObj = $('<div class="contsGroup" data-index="1">\n' +
             '                                    <span class="txtIdx text-center col-1">1</span>\n' +
             '                                    <input type="file" class="recpImgFile col-5" name="recpImgFile"/>\n' +

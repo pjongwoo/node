@@ -15,6 +15,7 @@ var boardSchema = new Schema({
     stmodidate: { type: String },
     mainImg:{type:String},
     tag:{type:String},
+    mainDscrpt:{type:String, default: '내용이 없습니다.'},
 });
 
 module.exports = mongoose.model('board', boardSchema);
