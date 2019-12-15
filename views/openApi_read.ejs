@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <style>
+        .img-responsive{width:200px;}
+    </style>
+    <%- include('head'); %>
+</head>
+<body id="page-top">
+    <div class="wrap">
+    <%- include('menu'); %>
+
+    <div id ='container'><!-- body 시작-->
+        <div style="position: relative;
+        margin: 0 auto;
+        width: 80%;
+        top: 50%;">
+         <div style="display: flex;margin-bottom: 10px;justify-content: space-between;">
+             <h3 class="text-center"><%= title %></h3>
+
+            <form action="/mongoup/write" method="post" name="upForm">
+
+                
+                <table class="table table-bordered">
+                    <tr>
+
+                        <td scope="col" style="text-align: center;
+                        font-weight: normal;
+                        font-family: 'Nanum Barun Gothic';
+                        background: #fbfbfb;
+                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 요리명</td>
+                        <td><%= main.Grid_20150827000000000226_1.row[0].RECIPE_NM_KO %></td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="text-align: center;
+                        font-weight: normal;
+                        font-family: 'Nanum Barun Gothic';
+                        background: #fbfbfb;
+                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 설명</td>
+                        <td><%= main.Grid_20150827000000000226_1.row[0].SUMRY %></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;
+                        font-weight: normal;
+                        font-family: 'Nanum Barun Gothic';
+                        background: #fbfbfb;
+                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>재료</td>
+                        <td>
+                           <% for(var i=0 ; i<material.Grid_20150827000000000227_1.row.length ; i++){ %>
+                                <%=material.Grid_20150827000000000227_1.row[i].IRDNT_NM %>
+                                <%=material.Grid_20150827000000000227_1.row[i].IRDNT_CPCTY %>
+                                <br>
+                            <%  } %>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="text-align: center;
+                        font-weight: normal;
+                        font-family: 'Nanum Barun Gothic';
+                        background: #fbfbfb;
+                        color: #222;border-right: dashed 1px #e5e5e5;"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
+                        <td>
+                            <% for(var i=0 ; i<recipe.Grid_20150827000000000228_1.row.length ; i++){ %>
+                                
+                               <strong> <%=recipe.Grid_20150827000000000228_1.row[i].COOKING_NO%>.&nbsp;&nbsp;&nbsp;
+                                <img src='<%=recipe.Grid_20150827000000000228_1.row[i].STRE_STEP_IMAGE_URL%>'/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <%=recipe.Grid_20150827000000000228_1.row[i].COOKING_DC%></strong>
+                                <br><br>
+
+
+                            <%  } %>
+
+
+                        </td>
+                    </tr>
+
+                </table>
+
+            </form>
+
+        </div>
+    </div><!-- body 종료-->
+</div>
+<%- include('footer'); %>
+</div>
+
+</body>
+</html>
