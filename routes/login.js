@@ -49,8 +49,6 @@ router.get("/main", function(req, res){
         }
         res.render("main", {title: '메인페이지', rows: rows, length:rows.length});
     });
-
-
 });
 
 //로그인 여부 체크 API
