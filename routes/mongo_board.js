@@ -101,6 +101,15 @@ router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
     datas.name = req.body.name;
     datas.title = req.body.title;
     datas.idx = req.session.idx;
+    var tags = "";
+    for(var i=0 ; i<req.body.tag.length ; i++){
+        if(i == 0){
+            tags = req.body.tag[i];
+        }else{
+            tags = tags + ',' + req.body.tag[i];
+        }
+    }
+    datas.tag = tags;
     datas.hit = 0;
 
     datas.save(function(err){
@@ -175,7 +184,15 @@ router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
 
         if(req.body.title) board.title = req.body.title;
         board.modidate = Date.now();
-
+        var tags = "";
+        for(var i=0 ; i<req.body.tag.length ; i++){
+            if(i == 0){
+                tags = req.body.tag[i];
+            }else{
+                tags = tags + ',' + req.body.tag[i];
+            }
+        }
+        board.tag = tags;
 
         var deletes = deleteIndex.split(',');
         if("" != deletes[0]){

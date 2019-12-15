@@ -14,6 +14,7 @@ var boardSchema = new Schema({
     stregdate: { type: String   },
     stmodidate: { type: String },
     mainImg:{type:String},
+    tag:{type:String},
 });
 
 module.exports = mongoose.model('board', boardSchema);

@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= title %></title>
     <%- include('head'); %>
+    <link href="/css/tagit.css" rel="stylesheet">
+    <script src="/js/jquery.tagit.js"></script>
     <style>
         .txt_head{display:flex;}
         .txt_content{display: flex; padding:10px 0; -webkit-justify-content: center; justify-content: center; -webkit-align-items: center; align-items: center;}
@@ -20,6 +22,7 @@
         .recpImgFile > img{height:64px;}
         .btns{text-align: center; margin-top: 20px;}
         #upForm{display:none;}
+        #languages{width:100%;}
     </style>
 </head>
 <body>
@@ -51,6 +54,16 @@
                     </div>
                     <div class="panel-body">
                         <%= row.title %>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" >재료</h3>
+                    </div>
+                    <div class="panel-body">
+                        <% for(var i=0 ; i<row.tag.split(',').length ; i++){%>
+                        <button class="btn btn-outline-primary" style="cursor: default;"><%=row.tag.split(',')[i]%></button>
+                        <%}%>
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -97,6 +110,19 @@
                     <tr>
                         <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
                         <td><input type="text" class="form-control" name="title" id="title" value="<%= row.title %>" required/></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-light text-center"><span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 재료</td>
+                        <td>
+                            <ul id="languages" class="fake-input" tabindex="1">
+                                <% for(var i=0 ; i<row.tag.split(',').length ; i++){%>
+                                <li><%=row.tag.split(',')[i]%></li>
+                                <%}%>
+                            </ul>
+                            <script type="text/javascript">
+                                $("#languages").tagit();
+                            </script>
+                        </td>
                     </tr>
                     <tr>
                         <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>

@@ -8,6 +8,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%= title %></title>
     <%- include('head'); %>
+    <link href="/css/tagit.css" rel="stylesheet">
+    <script src="/js/jquery.tagit.js"></script>
+    <style>
+        #languages{width:100%;}
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -35,6 +40,15 @@
                     <tr>
                         <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 제목</td>
                         <td><input type="text" class="form-control" name="title" id="title" required/></td>
+                    </tr>
+                    <tr>
+                        <td class="bg-light text-center"><span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 재료</td>
+                        <td>
+                            <ul id="languages" class="fake-input" tabindex="1"></ul>
+                            <script type="text/javascript">
+                                $("#languages").tagit();
+                            </script>
+                        </td>
                     </tr>
                     <tr>
                         <td class="bg-light text-center"> <span class="vital" style="color: #ed1a3a; display: inline-block;">*</span>내용</td>
