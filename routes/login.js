@@ -7,6 +7,8 @@ var mysql = require('mysql');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var dbConfig = require('../dbConfig/database');
+//메일 Class 생성
+var nodemailer = require('nodemailer');
 //DB 접속 정보 생성
 
 var dbOptions = dbConfig;
@@ -112,6 +114,49 @@ router.post('/check', function(req, res) {
   });//query
 });
   
+//메일전송 API
+router.post("/mail", function(req, res){
+    var id = req.body.getID;
+ 
+    var sql = 'SELECT * FROM  nodedb.T_RECIPE_MEMBER where ID=?';
+    conn.query(sql, [id],  function(err, results){
+        if(err){
+            console.log(err);
+        }
+        //DB 정보가 없을경우.
+        if(!results[0]){
+            //res.render("login", {pass: "fail"});
+            res.json("no");
+        }else{
+            var user = results[0];
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'asws1457@gmail.com',  // gmail 계정 아이디를 입력
+                  pass: 'ikgiumawmvdleyda'     // gmail 계정의 비밀번호를 입력
+                }
+              });
+            
+              let mailOptions = {
+                from: 'asws1457@gmail.com',                               // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+                to: user.EMAIL,                                           // 수신 메일 주소
+                subject: user.NAME + '고객님 비밀번호 안내',               // 제목
+                text: user.NAME + '고객님 비밀번호는 '+user.PW +'입니다.' // 내용
+              };
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                 console.log(error);
+                }
+                else {
+                 console.log('Email sent: ' + info.response);
+                }
+            });
+            res.json("ok");
+        }
+    });//query
+
+});
+
 
 //회원가입 API
 router.post('/signup', function(req, res) {

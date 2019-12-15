@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -53,6 +52,128 @@
 		margin-top: 10px;
 		color: #ffffff;
 	}
+
+	.mail{
+		width: 100%;
+		padding: 15px;
+		background-color: #535b63;
+		border: 0;
+		box-sizing: border-box;
+		cursor: pointer;
+		font-weight: bold;
+		margin-top: 10px;
+		color: #ffffff;
+	}
+	
+	.modal {
+		opacity: 0;
+		visibility: hidden;
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		text-align: left;
+		background: rgba(0,0,0, .6);
+		transition: opacity .25s ease;
+	}
+	.modal_bg {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		cursor: pointer;
+	}
+	.modal-state {
+		display: none;
+	}
+	.modal-state:checked + .modal {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.modal-state:checked + .modal .modal__inner {
+		top: 0;
+		}
+
+	.modal_inner {
+		transition: top .25s ease;
+		position: absolute;
+		top: -20%;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		width: 20%;
+		margin: auto;
+		overflow: auto;
+		background: #fff;
+		border-radius: 5px;
+		padding: 1em 2em;
+		height: 30%;
+	}
+
+		.modal_close {
+		position: absolute;
+		right: 1em;
+		top: 1em;
+		width: 1.1em;
+		height: 1.1em;
+		cursor: pointer;
+	}
+
+	.modal_close:after,
+	.modal_close:before {
+		content: '';
+		position: absolute;
+		width: 2px;
+		height: 1.5em;
+		background: #ccc;
+		display: block;
+		transform: rotate(45deg);
+		left: 50%;
+		margin: -3px 0 0 -1px;
+		top: 0;
+	}
+
+	.modal_close:hover:after,
+	.modal_close:hover:before {
+		background: #aaa;
+	}
+
+	.modal_close:before {
+		transform: rotate(-45deg);
+	}
+
+	@media screen and (max-width: 768px) {
+			
+	.modal_inner {
+			width: 90%;
+			height: 90%;
+			box-sizing: border-box;
+		}
+	}
+
+	.btn {
+		width: 100%;
+		padding: 15px;
+		background-color: #535b63;
+		border: 0;
+		box-sizing: border-box;
+		cursor: pointer;
+		font-weight: bold;
+		margin-top: 10px;
+		color: #ffffff;
+
+		/* cursor: pointer;
+		background: #27ae60;
+		display: inline-block;
+		padding: .5em 1em;
+		color: #fff;
+		border-radius: 3px; */
+	}
+
+
 </style>
 <body>
 	<%
@@ -84,17 +205,60 @@
 			<input type="password" name="password" placeholder="password" /><br />
 			<input type="submit" value="로그인"/>
 			<input type="button" class="join" value="회원가입" ></input>
+			<div style="display: flex;">
+				<!-- <input type="button" class="btn" value="비밀번호찾기"  for="open-pop" ></input> -->
+				<label class="btn" for="open-pop" style="text-align: center;">비밀번호 찾기</label>
+			</div>
+			<!-- <input type="button" class="mail" value="메일전송" ></input> -->
+			<input class="modal-state" id="open-pop" type="checkbox" />
+			<div class="modal">
+				<label class="modal_bg" for="open-pop"></label>
+				<div class="modal_inner">
+			  	<label class="modal_close" for="open-pop"></label>
+			  	<h2 style="text-align: center;">비밀번호 찾기</h2 s>
+			 	<input type="text" name="returnId" id="returnId" placeholder="ID를 입력해주세요." /> 
+			  	<input type="button" class="mail" value="메일전송" /> 
+			</div>
+		  </div>
+		  
 		</form>
 	</div>
 	
 	<script>
-	 
         $(document).ready(function () {
 			$('.join').click(function(){
 				location.href = "signup";
 			});
+			$('.mail').click(function(){
+				var getID    = document.getElementById("returnId").value;
+           		var params=getID;  
+				$.ajax({
+					type: "post", //요청 메소드 방식
+					url:"/mail",
+					data:{
+						getID :getID
+					},
+					dataType:"text", 
+					success : function(result){
+						var test2 = $.parseJSON(result);
+						console.log(test2);
+						if (test2 == "no"){
+							console.log("if"+result);
+							alert("등록된 정보가 없습니다.");
+							location.href = "/";	
+						}else{
+							console.log("else"+result);
+							alert("메일로 보내드렸습니다.");
+							location.href = "/";
+						}
+				
+					},
+					error : function(err){
+						console.log("err"+ err);
+					}
+				});
+			});
 		});
-		
 	</script>
   </body>
 </html>
