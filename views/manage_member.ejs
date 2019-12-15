@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <%- include('head'); %>
+
+    <script>
+        // document.getElementById('testButton').onclick = clickedButton;
+        $(document).ready(function() {
+            $('#exampleModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+
+                var strArray = recipient.split('&');
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this);
+                // modal.find('.modal-title').text('New message to ' + recipient)
+                // id&name&email&phone
+                modal.find('.modal-body #idID').text(strArray[0]);
+                modal.find('.modal-body #idNAME').text(strArray[1]);
+                modal.find('.modal-body #idEMAIL').text(strArray[2]);
+                modal.find('.modal-body #idPHONE').text(strArray[3]);
+                modal.find('.modal-body #idDATE').text(strArray[4]);
+                modal.find('.modal-body #selectGrade').text(strArray[5]);
+            })
+        });
+
+        function clickedAdmin() {
+            $('#selectGrade').text("관리자");
+        }
+        function clickedMember() {
+            $('#selectGrade').text("회원");
+        }
+
+        function clickedUpdate() {
+            $.ajax({
+                url: '/manage/member/edit',
+                async: true,
+                type: 'POST',
+                data: {
+                    mode: "update",
+                    id: $("#idID").text(),
+                    grade: $("#selectGrade").text()
+                },
+                dataType: 'json',
+                success: function (data) {
+                    alert("정보 수정되었습니다.");
+                    location.href = '/manage/member'
+                },
+                error: function (err) {
+                    alert("수정 실패하였습니다.");
+                    location.href = '/manage/member'
+                }
+            });
+        }
+        function clickedDelete() {
+            $.ajax({
+                url: '/manage/member/edit',
+                async: true,
+                type: 'POST',
+                data: {
+                    mode: "delete",
+                    id: $("#idID").text(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    alert("회원 탈퇴 되었습니다.");
+                    location.href = '/manage/member'
+                },
+                error: function (err) {
+                    alert("탈퇴 실패하였습니다.");
+                    location.href = '/manage/member'
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<div class="wrap">
+    <%- include('menu'); %>
+    <div id='container' align="center">
+        <button type="button" class="btn btn-outline-secondary active" aria-pressed="true">회원 관리</button>
+        <button type="button" class="btn btn-outline-secondary">신고 & 건의</button>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col" style="text-align: center;padding: 1%;">번호</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">ID</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">이름</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">가입일</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">등급</th>
+                    <th scope="col" style="text-align: center;padding: 1%;">설정</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                for(var i=0; i<memberList.length; i++) {
+                %>
+                    <tr>
+                        <%
+                            var id = memberList[i].ID;
+                            var name = memberList[i].NAME;
+                            var email = memberList[i].EMAIL;
+                            var phone = memberList[i].PHONENUMBER;
+                            var date = memberList[i].REGDATE;
+                            var grade = "";
+                            if (memberList[i].GRADE == 0) {
+                                grade = "관리자";
+                            } else {
+                                grade = "회원";
+                            }
+
+                        %>
+                        <td scope="row" align="center"><%=i+1%></td>
+                        <td><%=id%></td>
+                        <td><%=name%></td>
+                        <td align="center"><%=date%></td>
+                        <td align="center"><%=grade%></td>
+                        <td align="center">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="<%=id%>&<%=name%>&<%=email%>&<%=phone%>&<%=date%>&<%=grade%>">
+                                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                            </button>
+<!--                            <form name="selectForm">-->
+<!--                                <button type="button" onclick="clickedButton('%=memberList[i].ID%>')" class="btn btn-default">-->
+<!--                                    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>-->
+<!--                                </button>-->
+<!--                            </form>-->
+                        </td>
+                    </tr>
+                <%
+                }
+                %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">회원 정보</h4>
+            </div>
+            <form role="form" name="submitForm">
+            <div class="modal-body">
+<!--                    <div class="form-group">-->
+<!--                        <label for="recipient-name" class="control-label">Recipient:</label>-->
+<!--                        <input type="text" class="form-control" id="recipient-name">-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="message-text" class="control-label">Message:</label>-->
+<!--                        <textarea class="form-control" id="message-text"></textarea>-->
+<!--                    </div>-->
+                    <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <tbody>
+                        <tr>
+                            <td>ID</td>
+                            <td id="idID" name="idID">idTD</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td id="idNAME">idNAME</td>
+                        </tr>
+                        <tr>
+                            <td>JoinDate</td>
+                            <td id="idDATE">idDATE</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td id="idEMAIL">idEMAIL</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td id="idPHONE">idPHONE</td>
+                        </tr>
+                        <tr>
+                            <td>Grade</td>
+                            <td>
+                                <!-- Split button -->
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary" id="selectGrade">회원</button>
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#" onclick="clickedAdmin()">관리자</a></li>
+                                        <li><a href="#" onclick="clickedMember()">회원</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" role="button" class="btn btn-primary" onclick="clickedUpdate()">정보 수정</a>
+                <a href="#" role="button" class="btn btn-danger" onclick="clickedDelete()">회원 탈퇴</a>
+                <a href="#" role="button" class="btn btn-outline-secondary" data-dismiss="modal">닫기</a>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include('footer'); %>
+</body>
+</html>
