@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var boardVo = require('../model/board');
 var boardUpVo = require('../model/boardUp');
 var boardImgVo = require('../model/boardImg');
+var replyVo = require('../model/reply');
 
 var multer = require('multer'); // multer모듈 적용 (for 파일업로드)
 var storage = multer.diskStorage({
@@ -157,9 +158,22 @@ router.get('/read/:id', function(req, res, next) {
             rowUp = row1;
 
         });
+
+
+
+        var replyRow;
+        replyVo.find({contentId : req.params.id+" "}, function(err, rows){
+            if(err) return res.status(500).send({error: 'boardImg database failure'});
+            replyRow=rows;
+            console.log(replyRow);
+            console.log(id);
+        })
+
+
+
         boardImgVo.find({uid:row.id}, function(err, imgRows){
             if(err) return res.status(500).send({error: 'boardImg database failure'});
-            res.render("mongo_read", {title: '게시판 보기', row: row, row1:rowUp, imgRows:imgRows, session:req.session});
+            res.render("mongo_read", {title: '게시판 보기', row: row, row1:rowUp, imgRows:imgRows, session:req.session, reply:replyRow});
         }).sort('num');
 
 
@@ -268,6 +282,20 @@ router.post('/delete', function(req, res, next) {
             res.redirect('/mongo/page/1');
         });
     });
+});
+
+router.post('/replywrite', function(req, res, next) {
+    var datas = new replyVo();
+    datas.userId = req.session.name;
+    datas.contentId = req.body.contentId;
+    datas.content = req.body.recpDtlConts;
+
+    datas.save(function(err){
+        if(err) return res.status(500).send({error: 'database failure = '+err});
+        res.send("<script>alert('저장되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
+        // res.redirect('/mongo/page/1');
+    });
+
 });
 
 

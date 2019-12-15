@@ -116,24 +116,24 @@
                 </div>
                 <div class="reply-wrapper">
                     <p><span>댓글 </span><span class="reply-cnt">10</span></p>
-                    <div class="reply-input-wrapper">
-                        <textarea class="reply-input-conts" rows="2" name="recpDtlConts" placeholder="무엇이 궁금하신가요? 댓글로 남겨주세요."></textarea>
-                        <button class="reply-btn btn btn-primary text-white">등록</button>
-                    </div>
-
+                    <form name='replyForm' id='replyForm' action="/mongo/replywrite" method="POST">
+                        <input type='hidden' name='contentId' value='<%= row._id %> '/>
+                        <div class="reply-input-wrapper">
+                            <textarea class="reply-input-conts" rows="2" name="recpDtlConts" placeholder="무엇이 궁금하신가요? 댓글로 남겨주세요."></textarea>
+                            <a class="reply-btn btn btn-primary text-white" href="javascript:replyForm.submit();">등록</a>
+                        </div>
+                    </form>
                     <div>
-                        <div class="reply-group">
-                            <span class="reply-name">pjwoo</span><span class="reply-date">2019-12-15 12:59:59</span>
-                            <div class="reply-conts">아주 맛있어보이네요!</div>
-                        </div>
-                        <div class="reply-group">
-                            <span class="reply-name">lywoo</span><span class="reply-date">2019-12-15 12:59:59</span>
-                            <div class="reply-conts">똑같이 따라했는데 맛이 이상해요...</div>
-                        </div>
-                        <div class="reply-group">
-                            <span class="reply-name">pjwoo</span><span class="reply-date">2019-12-15 12:59:59</span>
-                            <div class="reply-conts">아주 맛있어보이네요!</div>
-                        </div>
+                    
+                            <% for(var i=0; i<reply.length ; i++){%>
+                            <div class="reply-group">
+                                <span class="reply-name"><%= reply[i].userId %></span><span class="reply-date"><%= reply[i].regdate%></span>
+                                <div class="reply-conts"><%= reply[i].content %></div>
+                            </div>
+
+                        <%  }  %>
+
+                    
                     </div>
                 </div>
             </div>
