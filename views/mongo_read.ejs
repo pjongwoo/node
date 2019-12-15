@@ -23,6 +23,17 @@
         .btns{text-align: center; margin-top: 20px;}
         #upForm{display:none;}
         #languages{width:100%;}
+        .reply-wrapper{margin-top: 30px; }
+        .reply-cnt{color: #376492!important; font-weight: 900;}
+        .reply-wrapper p span{ font-size: 2em;}
+        .reply-input-wrapper{clear: both;height: 60px;}
+        .reply-input-conts{width: 89%; height: inherit; resize: none;}
+        .reply-btn{width: 10%; float: right; height: inherit; word-break:keep-all; background:#376492!important; border-color: #376492!important;}
+
+        .reply-name{margin-right: 20px;}
+        .reply-date{}
+        .reply-group{border-bottom: 1px solid #b4b9bd; padding: 10px;}
+        .reply-conts{margin-top: 10px;}
     </style>
 </head>
 <body>
@@ -102,6 +113,28 @@
                         <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
                     <%  } %>
 
+                </div>
+                <div class="reply-wrapper">
+                    <p><span>댓글 </span><span class="reply-cnt">10</span></p>
+                    <div class="reply-input-wrapper">
+                        <textarea class="reply-input-conts" rows="2" name="recpDtlConts" placeholder="무엇이 궁금하신가요? 댓글로 남겨주세요."></textarea>
+                        <button class="reply-btn btn btn-primary text-white">등록</button>
+                    </div>
+
+                    <div>
+                        <div class="reply-group">
+                            <span class="reply-name">pjwoo</span><span class="reply-date">2019-12-15 12:59:59</span>
+                            <div class="reply-conts">아주 맛있어보이네요!</div>
+                        </div>
+                        <div class="reply-group">
+                            <span class="reply-name">lywoo</span><span class="reply-date">2019-12-15 12:59:59</span>
+                            <div class="reply-conts">똑같이 따라했는데 맛이 이상해요...</div>
+                        </div>
+                        <div class="reply-group">
+                            <span class="reply-name">pjwoo</span><span class="reply-date">2019-12-15 12:59:59</span>
+                            <div class="reply-conts">아주 맛있어보이네요!</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <form action="/mongo/update" method="post" name="upForm" id="upForm" enctype="multipart/form-data">
