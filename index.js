@@ -13,6 +13,7 @@ var boardAdminRouter = require('./routes/admin_board');
 var sampleRouter = require('./routes/sample');
 var boardUpMongoRouter = require('./routes/mongo_boardUp');
 var manageRouter = require('./routes/manage_board');
+var openApi = require('./routes/openApiRecipe');
 var rankRouter = require('./routes/recipe_router');
 
 var boardVo = require('./model/board');
@@ -58,6 +59,7 @@ app.use('/admin',boardAdminRouter);
 app.use('/sample', sampleRouter);
 app.use('/mongoup',boardUpMongoRouter);
 app.use('/manage', manageRouter);
+app.use('/openApi',openApi);
 app.use('/recipe', rankRouter);
 
 // 세션값으로 페이지 이동

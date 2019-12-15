@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <style>
+        .img-responsive{width:200px;}
+    </style>
+    <%- include('head'); %>
+</head>
+<body id="page-top">
+    <div class="wrap">
+    <%- include('menu'); %>
+
+    <div id ='container'><!-- body 시작-->
+        <div style="position: relative;
+        margin: 0 auto;
+        width: 80%;
+        top: 50%;">
+         <div style="display: flex;margin-bottom: 10px;justify-content: space-between;">
+             <h3 class="text-center"><%= title %></h3>
+           
+         </div>
+            <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">번호</td>
+                <th scope="col">제목</td>
+                <th scope="col">설명</td>
+                <th scope="col">난이도</td>
+                 <th scope="col">조리시간</td>
+            </tr>
+            </thead>
+
+            
+                <%
+                for(var i=0 ; i<rows.Grid_20150827000000000226_1.row.length ; i++){
+                    var data = rows.Grid_20150827000000000226_1.row[i];
+
+                %>
+                <tr>
+                    <td><%= data.ROW_NUM %></td>
+                    <td><a href="/openApi/read/<%= data.RECIPE_ID %>/<%= data.RECIPE_NM_KO %>"><%= data.RECIPE_NM_KO %></a></td>
+                    <td><%= data.SUMRY %></td>
+                    <td><%= data.LEVEL_NM %></td>
+                    <td><%= data.COOKING_TIME %></td>
+
+                </tr>
+                <%
+                }
+                %>
+                <tr>
+                    <td colspan="6">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="/openApi/page/1" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <%
+                                    var maxpage = parseInt(rows.Grid_20150827000000000226_1.totalCnt/10) + 1;
+
+                                    for(var i=1 ; i <= maxpage ; i++){ 
+                                %>
+                                <li <% if(i==currentPage) {%>class="active"<%}%>  >
+                                    <a href='/openApi/page/<%=i%>'><%=i%></a>
+                                </li>
+                                <%
+                                }
+                                %>
+                                <li>
+                                    <a href="/openApi/page/<%= maxpage %>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div><!-- body 종료-->
+</div>
+<%- include('footer'); %>
+</div>
+
+</body>
+</html>
