@@ -113,6 +113,10 @@
                             var phone = memberList[i].PHONENUMBER;
                             var date = memberList[i].REGDATE;
                             var grade = "";
+
+                            if (memberList[i].REGDATE == "NaN-0NaN-0NaN 0NaN:0NaN:0NaN"){
+                                date =""
+                            }
                             if (memberList[i].GRADE == 0) {
                                 grade = "관리자";
                             } else {
