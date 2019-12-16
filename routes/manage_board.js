@@ -1,7 +1,8 @@
 var express = require('express');
 var mysql = require('mysql');
-var ejs = require('ejs');
 var router = express.Router();
+var reportVO = require('../model/report');
+var boardVO = require('../model/board');
 
 // DB 접속 정보 생성
 var dbConfig = require('./../dbConfig/database');
@@ -38,7 +39,6 @@ router.get('/member', function(req, res, next) {
                 results[i].REGDATE = getFormatDate(new Date(results[i].REGDATE));
              
             }
-
             res.render('manage_member', {title: '관리자 메뉴', memberList: results});
         }
     })
@@ -77,9 +77,7 @@ router.post('/member/edit', function (req, res) {
                 })
             }
         })
-
         // console.debug(editGrade);
-
     } else if (type == "delete") {
         // console.debug("delete!!!");
         const sql = 'DELETE FROM nodedb.T_RECIPE_MEMBER WHERE ID="' + editID + '";';
@@ -105,8 +103,67 @@ router.post('/member/edit', function (req, res) {
             }
         })
     }
-
     res.json({ok:true});
 })
+
+router.get('/report', function(req, res, next) {
+    reportVO.find({}, function (err, rows) {
+        if (err) {
+            return res.state(500).send({error: 'database failure'});
+    }
+        res.render('manage_report', {title: '신고 게시판 목록', rows: rows});
+    })
+});
+
+router.delete('/report/member', function(req, res, next) {
+    // console.debug('ㅁㅁㅁ' + req.body.writerIdx);
+    var deleteIdx = req.body.writerIdx;
+
+    boardVO.deleteMany({idx: deleteIdx}, function (err, board) {
+        if (err)
+            return res.status(500).json({error: 'database failure'});
+        if (!board)
+            return res.status(404).json({error: 'board not found'});
+
+        // console.debug(board);
+        reportVO.deleteMany({writerIdx: deleteIdx}, function (err, board) {
+            if (err)
+                return res.status(500).json({ error: 'database failure' });
+            if (!board)
+                return  res.status(404).json({ error: 'board not found' });
+
+            res.json({ok: true});
+        });
+    });
+});
+
+router.delete('/report/board', function(req, res, next) {
+    var contentsID = req.body.contentsID;
+    // console.debug("test: " + contentsID);
+    boardVO.findOne({_id: contentsID}, function (err, board) {
+        if (err)
+            return res.status(500).json({ error: 'database failure' });
+        if (!board)
+            return  res.status(404).json({ error: 'board not found' });
+
+        board.deleteOne(function (err) {
+            if (err)
+                console.err("err : " + err);
+
+            reportVO.findOne({contentsID: contentsID}, function (err, board) {
+                if (err)
+                    return res.status(500).json({ error: 'database failure' });
+                if (!board)
+                    return  res.status(404).json({ error: 'board not found' });
+
+                board.delete(function (err) {
+                    if (err)
+                        console.err("err : " + err);
+                    res.json({ok: true});
+                });
+            });
+        });
+    });
+});
 
 module.exports = router;
