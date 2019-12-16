@@ -72,7 +72,7 @@
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="img/cabin.png" alt="">
+            <img class="img-fluid" src="img/good<%=i%>.png" alt="">
           </div>
         </div>
 
@@ -131,7 +131,7 @@
     <div class="container">
 
       <!-- Contact Section Heading -->
-      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">혼달 문의</h2>
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">혼달 제휴문의</h2>
 
       <!-- Icon Divider -->
       <div class="divider-custom">
@@ -146,7 +146,7 @@
       <div class="row">
         <div class="col-lg-8 mx-auto">
           <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
-          <form name="sentMessage" id="contactForm" novalidate="novalidate">
+          <form>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls mb-0 pb-2">
                 <label>Name</label>
@@ -177,8 +177,8 @@
             </div>
             <br>
             <div id="success"></div>
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary btn-xl" id="sendMessageButton">Send</button>
+            <div class="form-group" style="display: flex;">
+              <button class="btn btn-primary btn-xl" id="sendMessageButton_1" style="flex: 1;">Send</button>
             </div>
           </form>
         </div>
@@ -186,6 +186,40 @@
 
     </div>
   </section>
+  <script>
+      $(document).ready(function () {
+     
+          $('#sendMessageButton_1').click(function(){
+            var getName    = document.getElementById("name").value;
+            var getEmail    = document.getElementById("email").value;
+            var getPhone    = document.getElementById("phone").value;
+            var getMessage    = document.getElementById("message").value;
+          
+            $.ajax({
+              type: "post", //요청 메소드 방식
+              url:"/question",
+              data:{
+                getName :getName,
+                getEmail :getEmail,
+                getPhone :getPhone,
+                getMessage :getMessage
+              },
+              dataType:"text", 
+              success : function(result){
+                  var check = $.parseJSON(result);
+                    if (check == "ok"){
+                      alert("빠른시일내에 답변 드리겠습니다.");
+                    }
+                  console.log("result"+result);
+              },
+              error : function(err){
+                console.log("err"+ err);
+              }
+            });
+          });
+
+      });
+  </script>
 
   <%- include('footer'); %>
 
@@ -226,7 +260,7 @@
                   <div class="divider-custom-line"></div>
                 </div>
                 <!-- Portfolio Modal - Image -->
-                <img class="img-fluid rounded mb-5" src="img/cabin.png" alt="">
+                <img class="img-fluid rounded mb-5" src="/<%=rows[i].mainImg%>" alt="">
                 <!-- Portfolio Modal - Text -->
                 <p class="mb-5"><%=data.content%></p>
                 <button class="btn btn-primary" href="#" data-dismiss="modal">

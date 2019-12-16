@@ -105,11 +105,12 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <% if(row.name == session.name ){ %>
+                    <% if(row.name == session.name || session.grade == 1 ){ %>
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
                     <% } else { %>
 <!--                        <a class="btn btn-danger text-white" href="#" id="report_Button" data-toggle="modal" data-target="#reportModal">신고</a>-->
                         <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">신고</button>
+                        <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
                     <% if(row1 != null && row1.userId != session.name){ %>
@@ -127,7 +128,7 @@
                         </div>
                     </form>
                     <div>
-                    
+                    <% if(reply!=null){%>
                             <% for(var i=0; i<reply.length ; i++){%>
                             <div class="reply-group">
                                 <span class="reply-name"><%= reply[i].userId %></span><span class="reply-date"><%= reply[i].regdate%></span>
@@ -136,7 +137,7 @@
 
                         <%  }  %>
 
-                    
+                        <%  }  %>
                     </div>
                 </div>
             </div>

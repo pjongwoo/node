@@ -40,15 +40,15 @@ router.get('/logout', function(req, res){
 router.get("/main", function(req, res){
     console.log("세션 생성 " + req.session.name);
     console.log("세션 생성 " + req.session.idx);
-
-    boardVo.find({hit:{$gt:1}},function(err, rows){
+ 
+    boardVo.find({hit:{$gt:6}},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
         for(var i = 0 ; i<rows.length ; i++){
             //console.log(getFormatDate(new Date(rows[i].regdate)));
             console.log("Main 데이터 확인 "+ rows[i].hit);
         }
         res.render("main", {title: '메인페이지', rows: rows, length:rows.length});
-    });
+    }).limit(6).sort('-regdate');
 });
 
 //로그인 여부 체크 API
@@ -74,6 +74,7 @@ router.post('/login', function(req, res) {
                 console.log(user.ID);
                 req.session.name =  user.NAME;
                 req.session.idx =  user.IDX;
+                req.session.grade = user.GRADE;
                 return res.redirect('/main');
             }
 
@@ -134,12 +135,16 @@ router.post("/mail", function(req, res){
                   pass: 'ikgiumawmvdleyda'     // gmail 계정의 비밀번호를 입력
                 }
               });
-            
+              
+            var html = '<table align="center" border="1" cellpadding="0" cellspacing="0" width="580">'
+            html = html + '<tr> <td> <img src=https://s3.ap-northeast-2.amazonaws.com/frontenddssreact.org/PORTFOLIO/mail.PNG style="display: block;" /> </td> </tr>'
+            html = html + '<tr>  <td style="padding: 20px 0 30px 0;font-weight: bold;text-align: center;">' + user.NAME + '고객님 비밀번호는 <b style="color:#c92a2a">' +user.PW +' </b>입니다. </td> </tr> </table>'
+
               let mailOptions = {
                 from: 'asws1457@gmail.com',                               // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
                 to: user.EMAIL,                                           // 수신 메일 주소
                 subject: user.NAME + '고객님 비밀번호 안내',               // 제목
-                text: user.NAME + '고객님 비밀번호는 '+user.PW +'입니다.' // 내용
+                html: html // 내용
               };
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
@@ -153,6 +158,64 @@ router.post("/mail", function(req, res){
         }
     });//query
 
+});
+
+
+//문의 API
+router.post("/question", function(req, res){
+    var Name = req.body.getName;
+    var Email = req.body.getEmail;
+    var Phone = req.body.getPhone;
+    var Message = req.body.getMessage;
+   
+    var inquiry = {
+        "NAMES": Name,
+        "EMAIL": Email,
+        "PHONENUMBER": Phone,
+        "CONTENT": Message,
+    }
+
+    conn.query('INSERT INTO  nodedb.T_INQUIRY  SET ?' , inquiry, function (error, results, fields) {
+        if (error) {
+            console.log("error ocurred", error);
+            res.redirect('/404');
+        } else {
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'asws1457@gmail.com',  // gmail 계정 아이디를 입력
+                  pass: 'ikgiumawmvdleyda'     // gmail 계정의 비밀번호를 입력
+                }
+              });
+              
+            var html = '<table align="center" border="1" cellpadding="0" cellspacing="0" width="580">'
+            html = html + '<tr> <td> <img src=https://s3.ap-northeast-2.amazonaws.com/frontenddssreact.org/PORTFOLIO/mail.PNG style="display: block;" /> </td> </tr>'
+            html = html + '<tr>  <td style="padding: 20px 0 30px 0;font-weight: bold;text-align: center;">' + Name + '고객님 제휴 문의 내용 입니다. '
+            html = html + '<tr>  <td style="padding: 20px 0 30px 0;font-weight: bold;text-align: center;">' + Message + '  </td> </tr> </table>'
+            
+              let mailOptions = {
+                from: 'asws1457@gmail.com',                               // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+                to: 'asws1457@gmail.com',                                         // 수신 메일 주소
+                subject: '관리자님 혼달 제휴문의메일 입니다',               // 제목
+                html: html // 내용
+              };
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                 console.log(error);
+                }
+                else {
+                 console.log('Email sent: ' + info.response);
+                }
+            });
+            res.json("ok");
+        }
+    });
+  
+    console.log("Name"+Name);
+    console.log("Email"+Email);
+    console.log("Phone"+Phone);
+    console.log("Message"+Message);
+  
 });
 
 

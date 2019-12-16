@@ -76,15 +76,36 @@ router.get('/page', function(req, res, next) {
 
 router.get('/page/:page', function(req, res, next) {
     var page = req.params.page;
-
-     boardVo.find({},function(err, rows){
-        if(err) return res.status(500).send({error: 'database failure'});
-        for(var i = 0 ; i<rows.length ; i++){
-            rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
-            rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
-        }
-        res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
-    }).sort('-regdate');
+    var tp = req.query.tp;
+    var txt = req.query.txt;
+    if(tp == 'tp1'){
+        boardVo.find({title: { $regex: txt } },function(err, rows){
+            if(err) return res.status(500).send({error: 'database failure'});
+            for(var i = 0 ; i<rows.length ; i++){
+                rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
+                rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
+            }
+            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+        }).sort('-regdate');
+    }else if(tp == 'tp2'){
+        boardVo.find({tag:{ $regex: txt }},function(err, rows){
+            if(err) return res.status(500).send({error: 'database failure'});
+            for(var i = 0 ; i<rows.length ; i++){
+                rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
+                rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
+            }
+            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+        }).sort('-regdate');
+    }else{
+         boardVo.find({},function(err, rows){
+            if(err) return res.status(500).send({error: 'database failure'});
+            for(var i = 0 ; i<rows.length ; i++){
+                rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
+                rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
+            }
+            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+        }).sort('-regdate');
+    }
 });
 
 router.get('/write', function(req, res, next) {
@@ -162,11 +183,14 @@ router.get('/read/:id', function(req, res, next) {
 
 
         var replyRow;
+       
         replyVo.find({contentId : req.params.id+" "}, function(err, rows){
-            if(err) return res.status(500).send({error: 'boardImg database failure'});
-            replyRow=rows;
-            console.log(replyRow);
-            console.log(id);
+            if(err) return res.status(500).send({error: 'replyVo database failure'});
+           console.log(rows);
+           console.log(rows.length);
+
+            replyRow = rows; //json으로 파싱
+
         })
 
 
@@ -269,17 +293,17 @@ router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
     
 });
 
-router.post('/delete', function(req, res, next) {
-    boardVo.findOne({_id:req.body.id}, function(err, board){
+router.get('/delete/:id', function(req, res, next) {
+    boardVo.findOne({_id:req.params.id}, function(err, board){
         if(err) return res.status(500).json({ error: 'database failure' });
         if(!board) return res.status(404).json({ error: 'board not found' });
-        if(req.session.idx != board.idx){
+        if(req.session.idx != board.idx && req.session.grade == 0){
             res.send("<script>alert('글쓴이가 아닙니다.'); location.href = '/mongo/page/1';</script>");
             return;
         }
         board.deleteOne(function(err){
             if(err) console.err("err : "+err);
-            res.redirect('/mongo/page/1');
+            res.send("<script>alert('삭제되었습니다.'); location.href = '/mongo/page/1';</script>");
         });
     });
 });
