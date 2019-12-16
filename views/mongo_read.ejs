@@ -105,8 +105,9 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <% if(row.name == session.name ){ %>
+                    <% if(row.name == session.name || session.grade == 1 ){ %>
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
+                        <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
                     <% if(row1 != null && row1.userId != session.name){ %>
