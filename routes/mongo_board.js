@@ -162,11 +162,14 @@ router.get('/read/:id', function(req, res, next) {
 
 
         var replyRow;
+       
         replyVo.find({contentId : req.params.id+" "}, function(err, rows){
-            if(err) return res.status(500).send({error: 'boardImg database failure'});
-            replyRow=rows;
-            console.log(replyRow);
-            console.log(id);
+            if(err) return res.status(500).send({error: 'replyVo database failure'});
+           console.log(rows);
+           console.log(rows.length);
+
+            replyRow = rows; //json으로 파싱
+
         })
 
 

@@ -124,7 +124,7 @@
                         </div>
                     </form>
                     <div>
-                    
+                    <% if(reply!=null){%>
                             <% for(var i=0; i<reply.length ; i++){%>
                             <div class="reply-group">
                                 <span class="reply-name"><%= reply[i].userId %></span><span class="reply-date"><%= reply[i].regdate%></span>
@@ -133,7 +133,7 @@
 
                         <%  }  %>
 
-                    
+                        <%  }  %>
                     </div>
                 </div>
             </div>
