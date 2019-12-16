@@ -107,6 +107,9 @@
                 <div class="text-center">
                     <% if(row.name == session.name ){ %>
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
+                    <% } else { %>
+<!--                        <a class="btn btn-danger text-white" href="#" id="report_Button" data-toggle="modal" data-target="#reportModal">신고</a>-->
+                        <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">신고</button>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
                     <% if(row1 != null && row1.userId != session.name){ %>
@@ -243,9 +246,6 @@
                     $("#deleteIndex").val($("#deleteIndex").val() + ',' + $(this).parent().attr("data-index"));
                 }
             }
-
-
-
             $(this).parent().remove();
 
             // $('.contsGroup').last().remove();
@@ -256,8 +256,96 @@
             $("#upForm").show();
         }
 
+        $(function () {
+            $('#report_Button').click( function () {
+                // alert($("#categoryLabel").text());
+                // alert($("#message-text").val());
+                $.ajax({
+                    url: '/report',
+                    async: true,
+                    type: 'POST',
+                    data: {
+                        reportTitle: $("#categoryLabel").text(),
+                        reportContents: $("#message-text").val(),
+                        reportWriter: "<%=session.name%>",
+                        contentsId: "<%=row._id%>",
+                        title: "<%=row.title%>",
+                        writerName: "<%=row.name%>",
+                        writerIdx: "<%=row.idx%>",
+                        writeDate: "<%=row.regdate%>"
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        alert('신고 완료');
+                    },
+                    error: function (err) {
+                        alert('신고 실패: ' + err);
+                    }
+                })
+            })
+        })
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-body input').val(recipient)
+        })
+
+        var categoryArray = ['영리목적/홍보성', '불법정보', '음란성/선정성', '욕설/인신공격', '개인정보노출', '같은 내용의 반복 게시 (도배)', '기타']
+        function clickedCategory(num) {
+            $('#categoryLabel').text(categoryArray[num]);
+        }
     </script>
 </div>
+
+<!-- 신고 모달 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">신고 제목: </label>
+                        <div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="caret" id="categoryLabel">영리목적/홍보성</span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#" onclick="clickedCategory(0)">영리목적/홍보성</a></li>
+                                    <li><a href="#" onclick="clickedCategory(1)">불법정보</a></li>
+                                    <li><a href="#" onclick="clickedCategory(2)">음란성/선정성</a></li>
+                                    <li><a href="#" onclick="clickedCategory(3)">욕설/인신공격</a></li>
+                                    <li><a href="#" onclick="clickedCategory(4)">개인정보노출</a></li>
+                                    <li><a href="#" onclick="clickedCategory(5)">같은 내용의 반복 게시 (도배)</a></li>
+                                    <li><a href="#" onclick="clickedCategory(6)">기타</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">신고 내용: </label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="report_Button" data-dismiss="modal">신고하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%- include('footer'); %>
 </body>
 </html>
