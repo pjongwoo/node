@@ -41,14 +41,14 @@ router.get("/main", function(req, res){
     console.log("세션 생성 " + req.session.name);
     console.log("세션 생성 " + req.session.idx);
  
-    boardVo.find({hit:{$gt:1}},function(err, rows){
+    boardVo.find({hit:{$gt:6}},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
         for(var i = 0 ; i<rows.length ; i++){
             //console.log(getFormatDate(new Date(rows[i].regdate)));
             console.log("Main 데이터 확인 "+ rows[i].hit);
         }
         res.render("main", {title: '메인페이지', rows: rows, length:rows.length});
-    }).limit(6);
+    }).limit(6).sort('-regdate');
 });
 
 //로그인 여부 체크 API
