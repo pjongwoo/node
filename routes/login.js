@@ -74,6 +74,7 @@ router.post('/login', function(req, res) {
                 console.log(user.ID);
                 req.session.name =  user.NAME;
                 req.session.idx =  user.IDX;
+                req.session.grade = user.GRADE;
                 return res.redirect('/main');
             }
 
