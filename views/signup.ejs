@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>RECIPE JOIN</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    </head>
     <style>
         .headForm{margin-top: 8%;}
         body{background-color: #e9ecef;}
+        .container{display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    }
     </style>
     <script>
-        $(function(){
-       
-        });
         // document.getElementById("join-submit").addEventListener("click", button1_click);
         // 회원가입 빈칸 체크
         function button1_click() {
@@ -105,17 +97,15 @@
                     console.log("err"+ err);
                 }
             });
-
-
-    
         }
     </script>
     <body>
+        <div>
+            <%- include('head'); %>
+        </div>
         <article class="container">
             <div class="headForm">
-                <div class="col-md-6 col-md-offset-3">
-                        <h3 style="text-align: center;font-weight: bold;">혼달 회원가입</h3>
-                </div>
+                    <h1>혼달 회원가입</h1>
             </div>
             <div class="col-sm-6 col-md-offset-3">
                   
@@ -155,8 +145,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-
-        </article>
+            </div>  
     </body>
 </html>
