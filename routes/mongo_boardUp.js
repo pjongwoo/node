@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var boardUpVo = require('../model/boardUp');
+var boardVo = require('../model/board');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
@@ -44,12 +45,18 @@ router.post('/write', function(req, res, next) {
     datas.userId = req.session.name;
     datas.contentId = req.body.id;
 
-
-
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'database failure = '+err});
-        res.send("<script>alert('추천되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
-        // res.redirect('/mongo/page/1');
+
+        boardVo.findOne({_id: req.body.id}, function(err, row) {
+            if(err) return res.status(500).send({error: 'database failure'});
+            row.recommen = row.recommen + 1;
+
+            row.save(function(err){
+                if(err) res.status(500).json({error: 'failed to update'});
+                res.send("<script>alert('추천되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
+            });
+        });
     });
 
 });
