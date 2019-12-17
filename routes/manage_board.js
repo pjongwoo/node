@@ -27,7 +27,6 @@ function getFormatDate(date){
 
 router.get('/member', function(req, res, next) {
     const sql = 'SELECT * FROM nodedb.T_RECIPE_MEMBER ORDER BY GRADE ASC;';
-    const id = "";
     conn.query(sql, function (err, results) {
         if (err) {
             console.log(err);
@@ -37,7 +36,7 @@ router.get('/member', function(req, res, next) {
         } else {
             for(var i = 0; i < results.length; i++) {
                 results[i].REGDATE = getFormatDate(new Date(results[i].REGDATE));
-             
+                // console.debug(results[i].REGDATE);
             }
             res.render('manage_member', {title: '관리자 메뉴', memberList: results});
         }
@@ -110,7 +109,10 @@ router.get('/report', function(req, res, next) {
     reportVO.find({}, function (err, rows) {
         if (err) {
             return res.state(500).send({error: 'database failure'});
-    }
+        }
+        for(var i = 0; i < rows.length; i++) {
+            rows[i].writeDate = new Date(rows[i].writeDate).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+        }
         res.render('manage_report', {title: '신고 게시판 목록', rows: rows});
     })
 });

@@ -115,6 +115,9 @@
                             var writerName = rows[i].writerName;
                             var writerIdx = rows[i].writerIdx;
                             var writeDate = rows[i].writeDate;
+                            if (rows[i].writeDate == "NaN-0NaN-0NaN 0NaN:0NaN:0NaN"){
+                                writeDate = ""
+                            }
                         %>
                         <td scope="row" align="center"><%=i+1%></td>
                         <td><%=reportTitle%></td>
