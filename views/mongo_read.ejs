@@ -121,10 +121,13 @@
                         <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">신고</button>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
-                    <% if(row1 != null && row1.userId != session.name){ %>
-                        <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:upForm.submit();">추천</a>
+                    <% if(row1 == null || row1.userId != session.name){ %>
+                        <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:LikeForm.submit();">추천</a>
                     <%  } %>
+                    <form name='LikeForm' id='LikeForm' action="/mongoup/write" method="POST">
 
+                        <input type='hidden' name='id' value='<%= row._id %> '/>
+                    </form>
                 </div>
                 <div class="reply-wrapper">
                     <p><span>댓글 </span><span class="reply-cnt"><%=reply.length%></span><span>개</span></p>

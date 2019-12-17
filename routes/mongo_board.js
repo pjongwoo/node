@@ -174,8 +174,9 @@ router.get('/read/:id', function(req, res, next) {
             if(err) res.status(500).json({error: 'failed to update'});
         });
         var rowUp;
-        boardUpVo.findOne({contentId:req.params.id, userId:req.session.name}, function(err, row1){
+        boardUpVo.findOne({contentId:id+" ", userId:req.session.name}, function(err, row1){
             if(err) return res.status(500).send({error: 'boardUp database failure'});
+            console.log(row1+" //"+id + req.session.name);
             rowUp = row1;
 
         });
