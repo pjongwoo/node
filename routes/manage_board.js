@@ -14,7 +14,7 @@ function getFormatDate(date){
     var month = (1 + date.getMonth());          //M
     month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
     var day = date.getDate();                   //d
-    var hour = date.getHours()
+    var hour = date.getHours();
     hour = hour >= 10 ? hour : '0' + hour;
     var min = date.getMinutes();
     min = min >= 10 ? min : '0' + min;
