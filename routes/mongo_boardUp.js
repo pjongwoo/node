@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var boardUpVo = require('../model/boardup');
+var boardUpVo = require('../model/boardUp');
 
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
