@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <% if(row.name == session.name || session.grade == 1 ){ %>
+                    <% if(row.name == session.name || session.grade == 0 ){ %>
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
                         <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } else { %>
@@ -149,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            <form action="/mongo/update" method="post" name="upForm" id="upForm" enctype="multipart/form-data">
+            <form action="/mongo/update" method="post" name="upForm" id="upForm" onsubmit="return onSubmit();" enctype="multipart/form-data">
                 <input type="hidden" name="originSize" value="<%= imgRows.length %>">
                 <input type="hidden" id="deleteIndex" name="deleteIndex" value=""/>
                 <input type="hidden" name="id" value="<%= row._id %>">
@@ -267,6 +267,16 @@
         function update(){
             $(".read_area").hide();
             $("#upForm").show();
+        }
+
+        function onSubmit(){
+            var imgNum = $("#contsArea").children().length;
+
+            if(imgNum < 2){
+                alert("이미지를 2개 이상 등록해주세요.");
+                return false;
+            }
+            return true;
         }
 
         $(function () {

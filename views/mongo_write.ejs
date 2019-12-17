@@ -20,7 +20,7 @@
     <div id ='container'><!-- body 시작-->
         <div class="col-12">
             <h3 class="text-center"><%= title %></h3>
-            <form action="/mongo/write" method="post" enctype="multipart/form-data">
+            <form action="/mongo/write" method="post" enctype="multipart/form-data" onsubmit="return onSubmit();">
                 <style>
                     .contsGroup *{vertical-align: middle;}
                     .recpDtlConts{display: inline-block;}
@@ -98,9 +98,6 @@
 
                     $htmlStrObj.attr("data-index",currIdx);
                     $htmlStrObj.find('.txtIdx').text(currIdx);
-                    // $htmlStrObj.find('.recpImgFile').text($htmlStrObj.find('.recpImgFile').attr('id', 'recpImgFile'));
-                    // $htmlStrObj.find('.recpDtlConts').text($htmlStrObj.find('.recpDtlConts').attr('name', 'recpDtlConts'));
-                    // $htmlStrObj.find('.recpDtlConts').text($htmlStrObj.find('.recpDtlConts').attr('id', 'recpDtlConts'));
 
                     $('.contsGroup').last().after($htmlStrObj.clone());
 
@@ -128,6 +125,16 @@
 
                     // $('.contsGroup').last().remove();
                 });
+
+                function onSubmit(){
+                    var imgNum = $("#contsArea").children().length;
+
+                    if(imgNum < 2){
+                        alert("이미지를 2개 이상 등록해주세요.");
+                        return false;
+                    }
+                    return true;
+                }
 
             </script>
 
