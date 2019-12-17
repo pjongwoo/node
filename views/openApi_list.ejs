@@ -52,20 +52,68 @@
                 </tr>
                 <%
                 }
+
+                var maxpage = parseInt(rows.Grid_20150827000000000226_1.totalCnt/10) + 1;
+                var maxPageNum = 10
+                var curPageNum = ((currentPage-1)/maxPageNum)-(((currentPage-1)/maxPageNum)%1);
                 %>
                 <tr>
                     <td colspan="6">
                         <nav>
                             <ul class="pagination">
+                                <%=currentPage%>
+                                <%=maxpage%>
+                                <%=curPageNum%>
+                                <%
+                                    if(currentPage > 1){
+                                %>
                                 <li>
                                     <a href="/openApi/page/1" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
                                 <%
-                                    var maxpage = parseInt(rows.Grid_20150827000000000226_1.totalCnt/10) + 1;
+                                        if(1 < ((curPageNum-1)*maxPageNum+maxPageNum)){
+                                %>
+                                <li>
+                                    <a href="/openApi/page/<%=(curPageNum-1)*maxPageNum+maxPageNum%>" aria-label="Previous">
+                                        <span aria-hidden="true">‹</span>
+                                    </a>
+                                </li>
+                                <%
+                                        }else{
+                                %>
+                                <li>
+                                    <a href="/openApi/page/1" aria-label="Previous">
+                                        <span aria-hidden="true">‹</span>
+                                    </a>
+                                </li>
+                                <%
+                                        }
+                                    }else{
+                                %>
+                                <!--<li>-->
+                                    <!--<a href="/openApi/page/1" aria-label="Previous">-->
+                                        <!--<span aria-hidden="true">&laquo;</span>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="/openApi/page/1" aria-label="Previous">-->
+                                        <!--<span aria-hidden="true">‹</span>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <%
+                                        }
+                                %>
 
-                                    for(var i=1 ; i <= maxpage ; i++){ 
+
+
+
+                                <%
+                                    for(var i=curPageNum*maxPageNum+1 ; i <= curPageNum*maxPageNum+maxPageNum ; i++){
+                                        if(i > maxpage){
+                                            break;
+                                        }
                                 %>
                                 <li <% if(i==currentPage) {%>class="active"<%}%>  >
                                     <a href='/openApi/page/<%=i%>'><%=i%></a>
@@ -73,11 +121,49 @@
                                 <%
                                 }
                                 %>
+
+
+                                <%
+                                if(currentPage<maxpage){
+                                    if(maxpage > ((curPageNum+1)*maxPageNum+1)){
+                                %>
+                                <li>
+                                    <a href="/openApi/page/<%= (curPageNum+1)*maxPageNum+1 %>" aria-label="Next">
+                                        <span aria-hidden="true">›</span>
+                                    </a>
+                                </li>
+                                <%
+                                    }else{
+                                %>
+                                <li>
+                                    <a href="/openApi/page/<%= maxpage %>" aria-label="Next">
+                                        <span aria-hidden="true">›</span>
+                                    </a>
+                                </li>
+                                <%
+                                    }
+                                %>
                                 <li>
                                     <a href="/openApi/page/<%= maxpage %>" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
+                                <%
+                                }else{
+                                %>
+                                <!--<li>-->
+                                    <!--<a href="/openApi/page/<%= maxpage %>" aria-label="Next">-->
+                                        <!--<span aria-hidden="true">›</span>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="/openApi/page/<%= maxpage %>" aria-label="Next">-->
+                                        <!--<span aria-hidden="true">&raquo;</span>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <%
+                                }
+                                %>
                             </ul>
                         </nav>
 
