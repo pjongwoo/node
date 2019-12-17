@@ -59,11 +59,8 @@
                 %>
                 <tr>
                     <td colspan="6">
-                        <nav>
+                        <nav class="text-center">
                             <ul class="pagination">
-                                <%=currentPage%>
-                                <%=maxpage%>
-                                <%=curPageNum%>
                                 <%
                                     if(currentPage > 1){
                                 %>
@@ -81,33 +78,9 @@
                                     </a>
                                 </li>
                                 <%
-                                        }else{
-                                %>
-                                <li>
-                                    <a href="/openApi/page/1" aria-label="Previous">
-                                        <span aria-hidden="true">‹</span>
-                                    </a>
-                                </li>
-                                <%
                                         }
-                                    }else{
+                                    }
                                 %>
-                                <!--<li>-->
-                                    <!--<a href="/openApi/page/1" aria-label="Previous">-->
-                                        <!--<span aria-hidden="true">&laquo;</span>-->
-                                    <!--</a>-->
-                                <!--</li>-->
-                                <!--<li>-->
-                                    <!--<a href="/openApi/page/1" aria-label="Previous">-->
-                                        <!--<span aria-hidden="true">‹</span>-->
-                                    <!--</a>-->
-                                <!--</li>-->
-                                <%
-                                        }
-                                %>
-
-
-
 
                                 <%
                                     for(var i=curPageNum*maxPageNum+1 ; i <= curPageNum*maxPageNum+maxPageNum ; i++){
@@ -122,21 +95,12 @@
                                 }
                                 %>
 
-
                                 <%
                                 if(currentPage<maxpage){
                                     if(maxpage > ((curPageNum+1)*maxPageNum+1)){
                                 %>
                                 <li>
                                     <a href="/openApi/page/<%= (curPageNum+1)*maxPageNum+1 %>" aria-label="Next">
-                                        <span aria-hidden="true">›</span>
-                                    </a>
-                                </li>
-                                <%
-                                    }else{
-                                %>
-                                <li>
-                                    <a href="/openApi/page/<%= maxpage %>" aria-label="Next">
                                         <span aria-hidden="true">›</span>
                                     </a>
                                 </li>
@@ -148,19 +112,6 @@
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
-                                <%
-                                }else{
-                                %>
-                                <!--<li>-->
-                                    <!--<a href="/openApi/page/<%= maxpage %>" aria-label="Next">-->
-                                        <!--<span aria-hidden="true">›</span>-->
-                                    <!--</a>-->
-                                <!--</li>-->
-                                <!--<li>-->
-                                    <!--<a href="/openApi/page/<%= maxpage %>" aria-label="Next">-->
-                                        <!--<span aria-hidden="true">&raquo;</span>-->
-                                    <!--</a>-->
-                                <!--</li>-->
                                 <%
                                 }
                                 %>
