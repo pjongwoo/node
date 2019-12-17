@@ -41,13 +41,13 @@ router.get("/main", function(req, res){
     console.log("세션 생성 " + req.session.name);
     console.log("세션 생성 " + req.session.idx);
  
-    boardVo.find({hit:{$gt:6}},function(err, rows){
+    boardVo.find({},function(err, rows){
         if(err) return res.status(500).send({error: 'database failure'});
         for(var i = 0 ; i<rows.length ; i++){
             //console.log(getFormatDate(new Date(rows[i].regdate)));
             console.log("Main 데이터 확인 "+ rows[i].hit);
         }
-        res.render("main", {title: '메인페이지', rows: rows, length:rows.length});
+        res.render("main", {title: '메인페이지', rows: rows, length:rows.length,session:req.session});
     }).limit(6).sort('-regdate');
 });
 
@@ -189,7 +189,7 @@ router.post("/question", function(req, res){
               });
               
             var html = '<table align="center" border="1" cellpadding="0" cellspacing="0" width="580">'
-            html = html + '<tr> <td> <img src=https://s3.ap-northeast-2.amazonaws.com/frontenddssreact.org/PORTFOLIO/mail.PNG style="display: block;" /> </td> </tr>'
+            html = html + '<tr> <td> <img src=https://s3.ap-northeast-2.amazonaws.com/frontenddssreact.org/PORTFOLIO/question.png style="display: block;" /> </td> </tr>'
             html = html + '<tr>  <td style="padding: 20px 0 30px 0;font-weight: bold;text-align: center;">' + Name + '고객님 제휴 문의 내용 입니다. '
             html = html + '<tr>  <td style="padding: 20px 0 30px 0;font-weight: bold;text-align: center;">' + Message + '  </td> </tr> </table>'
             
@@ -249,6 +249,7 @@ router.post('/signup', function(req, res) {
 
 //이미지 가자요기
 router.get('/uploads/:url1/:url2', function(req, res) {
+    console.log(__dirname+'/../uploads/'+req.params.url1 + '/' + req.params.url2);
     fs.readFile(__dirname+'/../uploads/'+req.params.url1 + '/' + req.params.url2, function(err, data){
         res.writeHead(200, {'Content-Type' : 'text/html'});
         res.end(data);
