@@ -11,7 +11,7 @@
 
 <script>
     function clickedView(contentsID) {
-        alert('게시물 보기는 새창이 열립니다.');
+        // alert('게시물 보기는 새창이 열립니다.');
         window.open('/mongo/read/'+contentsID, '_blank');
     }
 
@@ -54,6 +54,27 @@
             }
         })
     }
+
+    function boardCheck(contentsID) {
+        // alert(contentsID);
+        $.ajax({
+            url: '/manage/report/board',
+            async: true,
+            type: 'POST',
+            data: {
+                contentsID: contentsID
+            },
+            dataType: 'json',
+            success: function (data) {
+                alert('게시물 확인 완료');
+                location.href = '/manage/report';
+            },
+            error: function (err) {
+                alert('게시물 확인 실패: ' + err);
+            }
+        })
+    }
+
 </script>
 </head>
 <body>
@@ -63,7 +84,8 @@
     <div id='container' align="center">
         <a class="btn btn-outline-secondary" href="/manage/member">회원 관리</a>
         <a class="btn btn-outline-secondary active" aria-pressed="true">신고 관리</a>
-
+        <br>
+        <br>
         <div class="table-responsive">
             <table class="table table-hover table-bordered">
                 <thead>
@@ -110,6 +132,7 @@
                                     <li><a href="#" onclick="clickedView('<%=rows[i].contentsID%>');">게시물 보기</a></li>
                                     <li><a href="#" onclick="boardDelete('<%=rows[i].contentsID%>');">게시물 삭제</a></li>
                                     <li><a href="#" onclick="memberDelete('<%=rows[i].writerIdx%>');">작성자 제명</a></li>
+                                    <li><a href="#" onclick="boardCheck('<%=rows[i].contentsID%>');">확인 완료</a></li>
                                 </ul>
                             </div>
                         </td>

@@ -166,4 +166,21 @@ router.delete('/report/board', function(req, res, next) {
     });
 });
 
+router.post('/report/board', function(req, res, next) {
+    var contentsID = req.body.contentsID;
+    // console.debug("test: " + contentsID);
+    reportVO.findOne({contentsID: contentsID}, function (err, board) {
+        if (err)
+            return res.status(500).json({ error: 'database failure' });
+        if (!board)
+            return  res.status(404).json({ error: 'board not found' });
+
+        board.delete(function (err) {
+            if (err)
+                console.err("err : " + err);
+            res.json({ok: true});
+        });
+    });
+});
+
 module.exports = router;

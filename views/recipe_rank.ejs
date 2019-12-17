@@ -10,8 +10,10 @@
     <%- include('head'); %>
 
     <script>
-        function clickedCategory(category) {
-            alert(category);
+        function clickedCategory(contentsID) {
+            // alert(contentsID);
+            // location.href('/mongo/read/'+contentsID);
+            window.open('/mongo/read/'+contentsID, '_blank');
         }
     </script>
 </head>
@@ -21,30 +23,6 @@
 
     <!-- Portfolio Section -->
     <section class="page-section portfolio" id="portfolio">
-
-        <div align="center">
-            <div class="btn-group btn-group-toggle center-block" data-toggle="buttons">
-                <label class="btn btn-secondary active" onclick="clickedCategory('option1')">
-                    <input type="radio" name="options" id="option1" autocomplete="off" checked>전체
-                </label>
-                <label class="btn btn-secondary" onclick="clickedCategory('option2')">
-                    <input type="radio" name="options" id="option2" autocomplete="off">한식
-                </label>
-                <label class="btn btn-secondary" onclick="clickedCategory('option3')">
-                    <input type="radio" name="options" id="option3" autocomplete="off">양식
-                </label>
-                <label class="btn btn-secondary" onclick="clickedCategory('option4')">
-                    <input type="radio" name="options" id="option4" autocomplete="off">중식
-                </label>
-                <label class="btn btn-secondary" onclick="clickedCategory('option5')">
-                    <input type="radio" name="options" id="option5" autocomplete="off">일식
-                </label>
-                <label class="btn btn-secondary" onclick="clickedCategory('option6')">
-                    <input type="radio" name="options" id="option6" autocomplete="off">기타
-                </label>
-            </div>
-        </div>
-
         <div class="container">
             <!-- Icon Divider -->
             <div class="divider-custom">
@@ -76,7 +54,7 @@
                 <!-- Portfolio Item 1 -->
                 <div class="col-md-6 col-lg-4">
                     <h4><%=i+1%>위 <%=rows[i].title%></h4>
-                    <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal<%=i%>">
+                    <div class="portfolio-item mx-auto" onclick="clickedCategory('<%=rows[i]._id%>')">
                         <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                             <div class="portfolio-item-caption-content text-center text-white">
                                 <i class="fas fa-plus fa-3x"></i>
@@ -95,51 +73,5 @@
     </section>
 </div>
 <%- include('footer'); %>
-
-<!-- Portfolio Modals -->
-<%
-for(var i=0; i<(length) ; i++){
-    var data = rows[i];
-%>
-<!-- Portfolio Modal 1 -->
-<div class="portfolio-modal modal fade" id="portfolioModal<%=i%>" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document" style="width:50;top: 10%;">
-        <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">
-            <i class="fas fa-times"></i>
-          </span>
-            </button>
-            <div class="modal-body text-center">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <!-- Portfolio Modal - Title -->
-                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0"><%=data.title%></h2>
-                            <!-- Icon Divider -->
-                            <div class="divider-custom">
-                                <div class="divider-custom-line"></div>
-                                <div class="divider-custom-icon">
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <div class="divider-custom-line"></div>
-                            </div>
-                            <!-- Portfolio Modal - Image -->
-                            <img class="img-fluid rounded mb-5" src="/img/cake.png" alt="">
-                            <!-- Portfolio Modal - Text -->
-                            <p class="mb-5"><%=data.content%></p>
-                            <button class="btn btn-primary" href="#" data-dismiss="modal">
-                                <i class="fas fa-times fa-fw"></i>
-                                Close Window
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<%}%>
-
 </body>
 </html>
