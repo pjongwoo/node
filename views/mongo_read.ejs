@@ -80,9 +80,17 @@
                         <h3 class="panel-title" >재료</h3>
                     </div>
                     <div class="panel-body">
-                        <% for(var i=0 ; i<row.tag.split(',').length ; i++){%>
+                        <% if(row.tag != null){
+                            for(var i=0 ; i<row.tag.split(',').length ; i++){%>
                         <button class="btn btn-outline-primary" style="cursor: default;"><%=row.tag.split(',')[i]%></button>
-                        <%}%>
+                        <%
+                            }
+                        }else{
+                        %>
+                            <span>등록된 재료가 없습니다.</span>
+                        <%
+                        }
+                        %>
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -107,10 +115,10 @@
                 <div class="text-center">
                     <% if(row.name == session.name || session.grade == 1 ){ %>
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
+                        <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } else { %>
 <!--                        <a class="btn btn-danger text-white" href="#" id="report_Button" data-toggle="modal" data-target="#reportModal">신고</a>-->
                         <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">신고</button>
-                        <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
                     <% if(row1 != null && row1.userId != session.name){ %>
@@ -164,9 +172,13 @@
                         <td class="bg-light text-center"><span class="vital" style="color: #ed1a3a; display: inline-block;">*</span> 재료</td>
                         <td>
                             <ul id="languages" class="fake-input" tabindex="1">
-                                <% for(var i=0 ; i<row.tag.split(',').length ; i++){%>
+                                <% if(row.tag != null){
+                                for(var i=0 ; i<row.tag.split(',').length ; i++){%>
                                 <li><%=row.tag.split(',')[i]%></li>
-                                <%}%>
+                                <%
+                                    }
+                                }
+                                %>
                             </ul>
                             <script type="text/javascript">
                                 $("#languages").tagit();

@@ -72,7 +72,7 @@
                         <nav>
                             <ul class="pagination">
                                 <%
-                                if(rows.length > 1){
+                                if(page > 1){
                                 %>
                                     <li>
                                         <a href="/mongo/page/1" aria-label="Previous">
@@ -106,7 +106,7 @@
                                 %>
 
                                 <%
-                                if(rows.length<maxpage){
+                                if(page<maxpage){
                                     if(maxpage > ((curPageNum+1)*maxPageNum+1)){
                                 %>
                                     <li>

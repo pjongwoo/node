@@ -226,11 +226,13 @@ router.post('/update', upload.array('recpImgFile'), function(req, res, next) {
         if(req.body.title) board.title = req.body.title;
         board.modidate = Date.now();
         var tags = "";
-        for(var i=0 ; i<req.body.tag.length ; i++){
-            if(i == 0){
-                tags = req.body.tag[i];
-            }else{
-                tags = tags + ',' + req.body.tag[i];
+        if(req.body.tag != null){
+            for(var i=0 ; i<req.body.tag.length ; i++){
+                if(i == 0){
+                    tags = req.body.tag[i];
+                }else{
+                    tags = tags + ',' + req.body.tag[i];
+                }
             }
         }
         board.tag = tags;
