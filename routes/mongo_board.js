@@ -190,7 +190,6 @@ router.get('/read/:id', function(req, res, next) {
            console.log(rows.length);
 
             replyRow = rows; //json으로 파싱
-
         })
 
 

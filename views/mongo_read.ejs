@@ -127,7 +127,7 @@
 
                 </div>
                 <div class="reply-wrapper">
-                    <p><span>댓글 </span><span class="reply-cnt">10</span></p>
+                    <p><span>댓글 </span><span class="reply-cnt"><%=reply.length%></span><span>개</span></p>
                     <form name='replyForm' id='replyForm' action="/mongo/replywrite" method="POST">
                         <input type='hidden' name='contentId' value='<%= row._id %> '/>
                         <div class="reply-input-wrapper">
@@ -137,15 +137,13 @@
                     </form>
                     <div>
                     <% if(reply!=null){%>
-                            <% for(var i=0; i<reply.length ; i++){%>
+                        <% for(var i=0; i<reply.length ; i++){%>
                             <div class="reply-group">
                                 <span class="reply-name"><%= reply[i].userId %></span><span class="reply-date"><%= reply[i].regdate%></span>
                                 <div class="reply-conts"><%= reply[i].content %></div>
                             </div>
-
                         <%  }  %>
-
-                        <%  }  %>
+                    <%  }  %>
                     </div>
                 </div>
             </div>

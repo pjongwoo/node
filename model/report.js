@@ -10,7 +10,7 @@ var boardSchema = new Schema({
     contentsTitle: {type: String},
     writerName: {type: String},
     writerIdx: {type: Number, required: true},
-    writeDate: {type: Date, default: Date.now},
+    writeDate: {type: String},
 });
 
 module.exports = mongoose.model('report', boardSchema);
