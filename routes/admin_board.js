@@ -28,7 +28,7 @@ function getCurrentDate(){
 
 
 router.get('/write', function(req, res, next) {
-    res.render('admin_write', {title: "게시판 글 쓰기", name:req.session.name});
+    res.render('admin_write', {title: "게시판 글 쓰기", name:req.session.name,session:req.session});
 });
 
 router.post('/write', function(req, res, next) {
@@ -51,7 +51,7 @@ router.get('/read/:id', function(req, res, next) {
     var id = req.params.id;
     boardVo.findOne({_id:req.params.id}, function(err, row){
         if(err) return res.status(500).send({error: 'database failure'});
-        res.render("admin_read", {title: '게시판 보기', row: row,name:req.session.name});
+        res.render("admin_read", {title: '게시판 보기', row: row,name:req.session.name,session:req.session});
     });
 });
 
@@ -122,7 +122,7 @@ router.get('/page/:page', function(req, res, next) {
             console.log(getFormatDate(new Date(rows[i].regdate)));
             console.log(rows[i].modidate);
         }
-        res.render("admin_page", {title: '미승인 게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+        res.render("admin_page", {title: '미승인 게시판 리스트', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name,session:req.session});
     });
 });
 

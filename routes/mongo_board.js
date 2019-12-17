@@ -85,7 +85,7 @@ router.get('/page/:page', function(req, res, next) {
                 rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
                 rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
             }
-            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name,session:req.session});
         }).sort('-regdate');
     }else if(tp == 'tp2'){
         boardVo.find({tag:{ $regex: txt }},function(err, rows){
@@ -94,7 +94,7 @@ router.get('/page/:page', function(req, res, next) {
                 rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
                 rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
             }
-            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name,session:req.session});
         }).sort('-regdate');
     }else{
          boardVo.find({},function(err, rows){
@@ -103,14 +103,14 @@ router.get('/page/:page', function(req, res, next) {
                 rows[i].stregdate = getFormatDate(new Date(rows[i].regdate));
                 rows[i].stmodidate = getFormatDate(new Date(rows[i].modidate));
             }
-            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name});
+            res.render("mongo_page", {title: '나만의 레시피를 공유해보세요!', rows: rows, page:page, length:rows.length-1, page_num:10, pass:true,name:req.session.name,session:req.session});
         }).sort('-regdate');
     }
 });
 
 router.get('/write', function(req, res, next) {
     req.session.boardId = uuid();
-    res.render('mongo_write', {title: "게시판 글 쓰기", name:req.session.name});
+    res.render('mongo_write', {title: "게시판 글 쓰기", name:req.session.name,session:req.session});
 });
 
 router.post('/write', upload.array('recpImgFile'), function(req, res, next) {
@@ -196,7 +196,7 @@ router.get('/read/:id', function(req, res, next) {
 
         boardImgVo.find({uid:row.id}, function(err, imgRows){
             if(err) return res.status(500).send({error: 'boardImg database failure'});
-            res.render("mongo_read", {title: '게시판 보기', row: row, row1:rowUp, imgRows:imgRows, session:req.session, reply:replyRow});
+            res.render("mongo_read", {title: '게시판 보기', row: row, row1:rowUp, imgRows:imgRows, session:req.session, reply:replyRow,session:req.session});
         }).sort('num');
 
 

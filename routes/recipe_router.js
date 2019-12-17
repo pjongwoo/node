@@ -10,7 +10,7 @@ router.get('/total', function(req, res, next) {
             // console.log("Main 데이터 확인 "+ rows[i].hit);
         }
 
-        res.render('recipe_rank', {title: '전체 레시피 랭킹', rows: rows, length:rows.length});
+        res.render('recipe_rank', {title: '전체 레시피 랭킹', rows: rows, length:rows.length,session:req.session});
     });
 });
 

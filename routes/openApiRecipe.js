@@ -33,7 +33,7 @@ router.get('/page/:page', function(req, res, next){
       }, function(err, res1, body) {
         let json = JSON.parse(body) //json으로 파싱
         console.log(json);
-        res.render("openApi_list", {title: '게시판 리스트', rows: json, currentPage:page});
+        res.render("openApi_list", {title: '게시판 리스트', rows: json, currentPage:page,session:req.session});
       });
 });
 
@@ -65,7 +65,7 @@ router.get('/read/:id/:name', function(req, res, next) {
                 console.log(err);
                 let json2 = JSON.parse(body3) //json으로 파싱
                 console.log(json2);
-                res.render("openApi_read", {title: '게시판 보기', recipe: json, material:json1, main:json2 });
+                res.render("openApi_read", {title: '게시판 보기', recipe: json, material:json1, main:json2,session:req.session });
             });
 
 

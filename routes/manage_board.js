@@ -38,7 +38,7 @@ router.get('/member', function(req, res, next) {
                 results[i].REGDATE = getFormatDate(new Date(results[i].REGDATE));
                 // console.debug(results[i].REGDATE);
             }
-            res.render('manage_member', {title: '관리자 메뉴', memberList: results});
+            res.render('manage_member', {title: '관리자 메뉴', memberList: results,session:req.session});
         }
     })
 });
@@ -113,7 +113,7 @@ router.get('/report', function(req, res, next) {
         for(var i = 0; i < rows.length; i++) {
             rows[i].writeDate = new Date(rows[i].writeDate).toISOString().replace(/T/, ' ').replace(/\..+/, '');
         }
-        res.render('manage_report', {title: '신고 게시판 목록', rows: rows});
+        res.render('manage_report', {title: '신고 게시판 목록', rows: rows,session:req.session});
     })
 });
 
