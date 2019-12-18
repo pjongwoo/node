@@ -42,7 +42,7 @@
             $.ajax({
                 url: '/manage/member/edit',
                 async: true,
-                type: 'POST',
+                type: 'PUT',
                 data: {
                     mode: "update",
                     id: $("#idID").text(),
@@ -63,7 +63,7 @@
             $.ajax({
                 url: '/manage/member/edit',
                 async: true,
-                type: 'POST',
+                type: 'PUT',
                 data: {
                     mode: "delete",
                     id: $("#idID").text(),
@@ -132,7 +132,7 @@
                         <td align="center"><%=date%></td>
                         <td align="center"><%=grade%></td>
                         <td align="center">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="<%=id%>&<%=name%>&<%=email%>&<%=phone%>&<%=date%>&<%=grade%>">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"data-whatever="<%=id%>&<%=name%>&<%=email%>&<%=phone%>&<%=date%>&<%=grade%>">
                                 <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                             </button>
                         </td>

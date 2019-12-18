@@ -22,17 +22,16 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 
     // send back the matched "whatever" to the chat
     bot.sendMessage(chatId, resp);
-    console.debug("onText");
+    console.log("onText");
 });
 
 // Listen for any kind of message. There are different kinds of
 // messages.
 bot.on('message', (msg) => {
     const chatId = msg.chat.id;
-
     var receiveMsg = msg.text;
     // send a message to the chat acknowledging receipt of their message
-    // console.debug(receiveMsg);
+    // console.log(receiveMsg);
 
     if (receiveMsg == "/connect") {
         botID = msg.chat.id;
@@ -47,14 +46,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    console.debug('reportTitle:' + req.body.reportTitle);
-    console.debug('reportContents:' + req.body.reportContents);
-    console.debug('reportWriter:' + req.body.reportWriter);
-    console.debug('contentsId:' + req.body.contentsId);
-    console.debug('title:' + req.body.title);
-    console.debug('writerName:' + req.body.writerName);
-    console.debug('writerIdx:' + req.body.writerIdx);
-    console.debug('writeDate:' + req.body.writeDate);
+    // console.log('reportTitle:' + req.body.reportTitle);
+    // console.log('reportContents:' + req.body.reportContents);
+    // console.log('reportWriter:' + req.body.reportWriter);
+    // console.log('contentsId:' + req.body.contentsId);
+    // console.log('title:' + req.body.title);
+    // console.log('writerName:' + req.body.writerName);
+    // console.log('writerIdx:' + req.body.writerIdx);
+    // console.log('writeDate:' + req.body.writeDate);
 
     var datas = new boardVO();
     datas.reportID = 0;
@@ -72,10 +71,9 @@ router.post('/', function(req, res, next) {
             return res.status(500).send({error: 'database failure = ' + err});
         }
         if (botID == 0) {
-            console.debug("disconnect hondalbot....")
+            console.log("disconnect hondalbot....")
         } else {
-            var text = req.body.textInput;
-            bot.sendMessage(botID, "[신고] " + req.body.reportTitle + "\n[신고내용]: " + req.body.reportContents + "\n[게시글 주소]: http://127.0.0.1:3000/mongo/read/" + req.body.contentsId);
+            bot.sendMessage(botID, "[신고] " + req.body.reportTitle + "\n[신고내용]: " + req.body.reportContents + "\n[게시글 주소]: http://dm1545870155704.fun25.co.kr:19615/mongo/read/" + req.body.contentsId);
             // next();
         }
         res.json({ok: true});
