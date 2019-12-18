@@ -117,7 +117,7 @@
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
                         <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } else { %>
-<!--                        <a class="btn btn-danger text-white" href="#" id="report_Button" data-toggle="modal" data-target="#reportModal">신고</a>-->
+                        <!-- JWCHEON: 신고 버튼 추가, Modal 버튼 구성 -->
                         <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">신고</button>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
@@ -296,17 +296,18 @@
         }
 
         $(function () {
+            // JWCHEON: 신고 버튼을 눌렀을 경우 실행되는 함수
             $('#report_Button').click( function () {
                 // alert($("#categoryLabel").text());
                 // alert($("#message-text").val());
-                $.ajax({
+                $.ajax({    // JWCHEON: ajax를 통해 신고 데이터를 router를 전송
                     url: '/report',
                     async: true,
-                    type: 'POST',
+                    type: 'POST',   // JWCHEON: 신고 데이터를 저장하기 위해 POST로 전송
                     data: {
-                        reportTitle: $("#categoryLabel").text(),
-                        reportContents: $("#message-text").val(),
-                        reportWriter: "<%=session.name%>",
+                        reportTitle: $("#categoryLabel").text(),    // JWCHEON: 신고 카테고리 text
+                        reportContents: $("#message-text").val(),   // JWCHEON: 신고 내용 value
+                        reportWriter: "<%=session.name%>",          // JWCHEON: 신고자(로그인 세션 이름 추출)
                         contentsId: "<%=row._id%>",
                         title: "<%=row.title%>",
                         writerName: "<%=row.name%>",
@@ -324,16 +325,16 @@
             })
         })
 
+        // JWCHEON: Modal javascript 구성
         $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever') // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var button = $(event.relatedTarget)
+            var recipient = button.data('whatever')
             var modal = $(this)
             modal.find('.modal-title').text('New message to ' + recipient)
             modal.find('.modal-body input').val(recipient)
         })
 
+        // JWCHEON: Modal에서 신고 카테고리(드롭다운버튼)을 골랐을 경우 text 세팅
         var categoryArray = ['영리목적/홍보성', '불법정보', '음란성/선정성', '욕설/인신공격', '개인정보노출', '같은 내용의 반복 게시 (도배)', '기타']
         function clickedCategory(num) {
             $('#categoryLabel').text(categoryArray[num]);
@@ -341,7 +342,7 @@
     </script>
 </div>
 
-<!-- 신고 모달 -->
+<!-- JWCHEON: 신고 모달 화면 구성 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -379,6 +380,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <!-- JWCHEON: id: report_Button을 통해 위에 등록해놓은 javascript 함수가 실행함 -->
                 <button type="button" class="btn btn-danger" id="report_Button" data-dismiss="modal">신고하기</button>
             </div>
         </div>

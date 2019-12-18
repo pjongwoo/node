@@ -181,8 +181,6 @@ router.get('/read/:id', function(req, res, next) {
 
         });
 
-
-
         var replyRow;
        
         replyVo.find({contentId : req.params.id+" "}, function(err, rows){

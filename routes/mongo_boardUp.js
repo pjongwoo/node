@@ -48,10 +48,12 @@ router.post('/write', function(req, res, next) {
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'database failure = '+err});
 
+        // JWCHEON: 추천이 되었다면 기존 게시글(boardVO)의 데이터를 찾아 추천 수를 +1 증가함
         boardVo.findOne({_id: req.body.id}, function(err, row) {
             if(err) return res.status(500).send({error: 'database failure'});
             row.recommen = row.recommen + 1;
 
+            // JWCHEON: 추천 수를 증가한 데이터를 저장하고, 페이지 이동할 수 있도록 res.send로 응답
             row.save(function(err){
                 if(err) res.status(500).json({error: 'failed to update'});
                 res.send("<script>alert('추천되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
@@ -60,47 +62,7 @@ router.post('/write', function(req, res, next) {
     });
 
 });
-/*
-router.get('/read/:id', function(req, res, next) {
-    var id = req.params.id;
-    boardVo.findOne({_id:req.params.id}, function(err, row){
-        if(err) return res.status(500).send({error: 'database failure'});
-        row.hit += 1;
-        row.save(function(err){
-            if(err) res.status(500).json({error: 'failed to update'});
-        });
-        res.render("mongo_read", {title: '게시판 보기', row: row});
-    });
-});
 
-router.post('/update', function(req, res, next) {
-    const id = req.body.id;
-    var datas = new boardVo();
-    datas.title = req.body.title;
-    datas.content = req.body.content;
-    datas.modidate = Date.now(); // 2
-
-    boardVo.findOne({_id:req.body.id}, function(err, board){
-        if(err) return res.status(500).json({ error: 'database failure' });
-        if(!board) return res.status(404).json({ error: 'board not found' });
-        if(req.session.idx != board.idx){
-            res.send("<script>alert('글쓴이가 아닙니다.'); location.href = '/mongo/page/1';</script>");
-            return;
-        }
-
-        if(req.body.title) board.title = req.body.title;
-        if(req.body.content) board.content = req.body.content;
-        board.modidate = Date.now();
-
-        board.save(function(err){
-            if(err) res.status(500).json({error: 'failed to update'});
-            // res.redirect('/mongo/read/'+res.req.body.id);
-            res.redirect('/mongo/page/1');
-        });
-
-    });
-});
-*/
 function getFormatDate(date){
     var year = date.getFullYear();              //yyyy
     var month = (1 + date.getMonth());          //M

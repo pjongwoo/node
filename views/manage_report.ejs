@@ -10,19 +10,21 @@
     <%- include('head'); %>
 
 <script>
+    // JWCHEON: 게시물 보기를 클릭했을 경우 새창 열기로 해당 게시글 이동하는 function
     function clickedView(contentsID) {
         // alert('게시물 보기는 새창이 열립니다.');
         window.open('/mongo/read/'+contentsID, '_blank');
     }
 
+    // JWCHEON: 게시물 삭제를 눌렀을 경우 실행
     function boardDelete(contentsID) {
         // alert(contentsID);
-        $.ajax({
+        $.ajax({    // JWCHEON: ajax를 통하여 해당 router로 데이터 전송
             url: '/manage/report/board',
             async: true,
-            type: 'DELETE',
+            type: 'DELETE', // JWCHEON: 게시글 삭제기 때문에 DELETE로 전송
             data: {
-                contentsID: contentsID
+                contentsID: contentsID  // JWCHEON: 삭제할 게시글의 ID 전송
             },
             dataType: 'json',
             success: function (data) {
@@ -35,14 +37,15 @@
         })
     }
 
+    // JWCHEON: 회원 제명 버튼을 눌렀을 경우 실행
     function memberDelete(writerIdx) {
         // alert(writerIdx);
         $.ajax({
             url: '/manage/report/member',
             async: true,
-            type: 'DELETE',
+            type: 'DELETE', // JWCHEON: 게시글 삭제기 때문에 DELETE로 전송
             data: {
-                writerIdx: writerIdx
+                writerIdx: writerIdx    // JWCHEON: 제명할 회원의 ID 데이터
             },
             dataType: 'json',
             success: function (data) {
@@ -55,6 +58,7 @@
         })
     }
 
+    // JWCHEON: 게시물 확인을 눌렀을 경우
     function boardCheck(contentsID) {
         // alert(contentsID);
         $.ajax({
@@ -62,7 +66,7 @@
             async: true,
             type: 'POST',
             data: {
-                contentsID: contentsID
+                contentsID: contentsID  // JWCHEON: 신고 목록에서 지울 ID 데이터
             },
             dataType: 'json',
             success: function (data) {
@@ -79,6 +83,7 @@
 </head>
 <body>
 
+<!-- JWCHEON: 신고 목록 화면 구성 -->
 <div class="wrap">
     <%- include('menu'); %>
     <div id='container' align="center">
@@ -103,6 +108,7 @@
 
                 <tbody>
                 <%
+                // JWCHEON: router로 부터 받은 rows 데이터, 신고 목록을 구성함
                 for(var i=0; i<rows.length; i++) {
                 %>
                     <tr>
@@ -131,7 +137,9 @@
                                 <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                                 </button>
+                                <!-- JWCHEON: 드롭 다운 버튼 구성 -->
                                 <ul class="dropdown-menu" role="menu">
+                                    <!-- JWCHEON: 각 버튼마다 onclick function으로 구성하여 인자값을 설정함 -->
                                     <li><a href="#" onclick="clickedView('<%=rows[i].contentsID%>');">게시물 보기</a></li>
                                     <li><a href="#" onclick="boardDelete('<%=rows[i].contentsID%>');">게시물 삭제</a></li>
                                     <li><a href="#" onclick="memberDelete('<%=rows[i].writerIdx%>');">작성자 제명</a></li>

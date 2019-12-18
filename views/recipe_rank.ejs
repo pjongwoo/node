@@ -10,14 +10,16 @@
     <%- include('head'); %>
 
     <script>
+        // JWCHEON: 랭킹 레시피를 선택했을 경우 선택한 레시피를 볼 수 있도록 새창으로 게시물을 볼 수 있또록 함
         function clickedCategory(contentsID) {
             // alert(contentsID);
             // location.href('/mongo/read/'+contentsID);
-            window.open('/mongo/read/'+contentsID, '_blank');
+            window.open('/mongo/read/'+contentsID, '_blank');   // JWCHEON: '_blank'로 새창 띄움
         }
     </script>
 </head>
 <body>
+<!-- JWCHEON: 랭킹 게시판 화면 구성 -->
 <div class="wrap">
     <%- include('menu'); %>
 
@@ -48,12 +50,14 @@
             <!-- Portfolio Grid Items -->
             <div class="row">
                 <%
+                // JWCHEON: router로 부터 받은 랭킹 게시글(추천 내림차순)으로 rows 데이터 가지고 화면 구성
                 for(var i=0; i<(length) ; i++){
                     var data = rows[i];
                 %>
                 <!-- Portfolio Item 1 -->
                 <div class="col-md-6 col-lg-4">
                     <h4><%=i+1%>위 <%=rows[i].title%></h4>
+                    <!-- JWCHEON: onclick으로 레시피를 클릭했을 경우 해당 레시피로 이동할 수 있도록 function 실행 -->
                     <div class="portfolio-item mx-auto" onclick="clickedCategory('<%=rows[i]._id%>')">
                         <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                             <div class="portfolio-item-caption-content text-center text-white">

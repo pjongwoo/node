@@ -10,17 +10,15 @@
     <%- include('head'); %>
 
     <script>
-        // document.getElementById('testButton').onclick = clickedButton;
         $(document).ready(function() {
+            // JWCHEON: 모달을 실행했을 경우 데이터 구성하여 modal 활성화
             $('#exampleModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var recipient = button.data('whatever') // Extract info from data-* attributes
 
+                // JWCHEON: 전달 받은 데이터를 '&' 단위로 짤라서 각 텍스트 세팅
                 var strArray = recipient.split('&');
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
                 var modal = $(this);
-                // modal.find('.modal-title').text('New message to ' + recipient)
                 // id&name&email&phone
                 modal.find('.modal-body #idID').text(strArray[0]);
                 modal.find('.modal-body #idNAME').text(strArray[1]);
@@ -31,6 +29,7 @@
             })
         });
 
+        // JWCHEON: 드롭다운 버튼에서 관리자 또는 회원을 선택했을 경우 text 값 변환
         function clickedAdmin() {
             $('#selectGrade').text("관리자");
         }
@@ -38,17 +37,19 @@
             $('#selectGrade').text("회원");
         }
 
+        // JWCHEON: 정보 수정을 눌렀을 경우
         function clickedUpdate() {
+            // JWCHEON: ajax를 통하여 router로 데이터 전송함
             $.ajax({
                 url: '/manage/member/edit',
-                async: true,
-                type: 'PUT',
-                data: {
-                    mode: "update",
+                async: true,    // JWCHEON: 응답을 기다림
+                type: 'PUT',    // JWCHEON: 정보 수정이기에 PUT으로 전송
+                data: {         // JWCHEON: router로 보낼 데이터 구성
                     id: $("#idID").text(),
                     grade: $("#selectGrade").text()
                 },
                 dataType: 'json',
+                // JWCHEON: 응답이 success일 경우 아래와 같이 alert 및 화면 이동
                 success: function (data) {
                     alert("정보 수정되었습니다.");
                     location.href = '/manage/member'
@@ -59,13 +60,14 @@
                 }
             });
         }
+
+        // JWCHEON: 회원 탈퇴를 눌렀을 경우
         function clickedDelete() {
             $.ajax({
                 url: '/manage/member/edit',
                 async: true,
-                type: 'PUT',
+                type: 'DELETE', // JWCHEON: 회원 삭제기 때문에 DELETE로 전송
                 data: {
-                    mode: "delete",
                     id: $("#idID").text(),
                 },
                 dataType: 'json',
@@ -105,6 +107,7 @@
                 </thead>
                 <tbody>
                 <%
+                // JWCHEON: router에서 받은 데이터 memberList를 통해 회원 목록을 뿌려줌
                 for(var i=0; i<memberList.length; i++) {
                 %>
                     <tr>
@@ -119,20 +122,23 @@
                             if (memberList[i].REGDATE == "NaN-0NaN-0NaN 0NaN:0NaN:0NaN"){
                                 date =""
                             }
+
+                            // JWCHEON: 관리자(0), 회원(1)
                             if (memberList[i].GRADE == 0) {
                                 grade = "관리자";
                             } else {
                                 grade = "회원";
                             }
-
                         %>
+
                         <td scope="row" align="center"><%=i+1%></td>
                         <td><%=id%></td>
                         <td><%=name%></td>
                         <td align="center"><%=date%></td>
                         <td align="center"><%=grade%></td>
                         <td align="center">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"data-whatever="<%=id%>&<%=name%>&<%=email%>&<%=phone%>&<%=date%>&<%=grade%>">
+                            <!-- JWCHEON: Modal 생성 버튼 및 눌렀을 경우 Modal에 세팅할 데이터 세팅 -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="<%=id%>&<%=name%>&<%=email%>&<%=phone%>&<%=date%>&<%=grade%>">
                                 <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
                             </button>
                         </td>
@@ -146,6 +152,7 @@
     </div>
 </div>
 
+<!-- JWCHEON: Modal 구성 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -189,6 +196,7 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
+                                        <!-- JWCHEON: 각 버튼을 눌렀을 경우 onclick으로 function 호출 -->
                                         <li><a href="#" onclick="clickedAdmin()">관리자</a></li>
                                         <li><a href="#" onclick="clickedMember()">회원</a></li>
                                     </ul>
@@ -200,6 +208,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <!-- JWCHEON: 각 버튼을 눌렀을 경우 onclick으로 function 호출 -->
                 <a href="#" role="button" class="btn btn-primary" onclick="clickedUpdate()">정보 수정</a>
                 <a href="#" role="button" class="btn btn-danger" onclick="clickedDelete()">회원 탈퇴</a>
                 <a href="#" role="button" class="btn btn-outline-secondary" data-dismiss="modal">닫기</a>
