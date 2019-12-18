@@ -9,8 +9,6 @@ var router  = express.Router();
 var path = require('path');
 var loginRouter = require('./routes/login');
 var boardMongoRouter = require('./routes/mongo_board');
-var boardAdminRouter = require('./routes/admin_board');
-var sampleRouter = require('./routes/sample');
 var boardUpMongoRouter = require('./routes/mongo_boardUp');
 var manageRouter = require('./routes/manage_board');
 var openApi = require('./routes/openApiRecipe');
@@ -56,8 +54,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('',loginRouter);
 app.use('/mongo',boardMongoRouter);
-app.use('/admin',boardAdminRouter);
-app.use('/sample', sampleRouter);
 app.use('/mongoup',boardUpMongoRouter);
 app.use('/manage', manageRouter);
 app.use('/openApi',openApi);
