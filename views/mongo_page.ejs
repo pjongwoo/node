@@ -63,9 +63,9 @@
                 }
                 }
 
-                var maxpage = parseInt(rows.length/10) + 1;
-                var maxPageNum = 10
-                var curPageNum = ((page-1)/maxPageNum)-(((page-1)/maxPageNum)%1);
+                var maxPageNum = 10 //최대 페이지블럭 갯수
+                var maxpage = parseInt(rows.length/maxPageNum) + 1; //현재 페이지블럭 갯수
+                var curPageNum = ((page-1)/maxPageNum)-(((page-1)/maxPageNum)%1); // 페이지블럭 번호
                 %>
                 <tr>
                     <td colspan="6">
