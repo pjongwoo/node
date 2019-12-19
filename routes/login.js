@@ -7,15 +7,15 @@ var mysql = require('mysql');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var dbConfig = require('../dbConfig/database');
-//메일 Class 생성
+//  HONGJUN: nodemailer 모듈 생성
 var nodemailer = require('nodemailer');
-//DB 접속 정보 생성
 
+// HONGJUN : MYSQL DB 접속 정보 생성
 var dbOptions = dbConfig;
 var conn = mysql.createConnection(dbOptions);
 conn.connect();
 
-// 세션값으로 페이지 이동
+// HONGJUN: 세션값으로 페이지 이동
 router.get('/', function (req, res) {
     if(!req.session.name)
         res.render("login", {pass: "success"});
@@ -29,14 +29,14 @@ router.get('/login', function(req, res){
         res.redirect('/404');
 });
 
-//로그아웃 페이지 예정
+//HONGJUN: 로그아웃 API
 router.get('/logout', function(req, res){
     req.session.destroy(function(err){
         res.redirect('/');
     });
 });
 
-//2019.12.14 조회수로 게시판 조회 후 main 이동
+//HONGJUN : 몽고DB로 게시판 조회 후 등록날짜 6개 데이터 검색 
 router.get("/main", function(req, res){
     console.log("세션 생성 " + req.session.name);
     console.log("세션 생성 " + req.session.idx);
@@ -51,7 +51,7 @@ router.get("/main", function(req, res){
     }).limit(6).sort('-regdate');
 });
 
-//로그인 여부 체크 API
+//HONGJUN : 로그인 체크 API
 router.post('/login', function(req, res) {
     var id = req.body.username;
     var pw = req.body.password;
@@ -78,24 +78,23 @@ router.post('/login', function(req, res) {
                 return res.redirect('/main');
             }
 
-        });//query
+        });
     }
 });
 
-//회원기입 이동
+//HONGJUN : 회원기입 이동
 router.get("/signup", function(req, res){
     res.render('signup', {status: ""});
 });
 
 
-//404 페이지 이동
+//HONGJUN : 404 페이지 이동
 router.get("/404", function(req, res){
     res.render('404');
 });
 
-//ID 중복체크 API
+//HONGJUN : ID 중복체크 API
 router.post('/check', function(req, res) {
-  console.log(req.body);
   var id = req.body.test;
   var sql = 'SELECT * FROM  nodedb.T_RECIPE_MEMBER where ID=?';
   conn.query(sql, [id],  function(err, results){
@@ -113,7 +112,7 @@ router.post('/check', function(req, res) {
   });//query
 });
   
-//메일전송 API
+//HONGJUN : 비밀번호 찾기 API
 router.post("/mail", function(req, res){
     var id = req.body.getID;
  
@@ -124,7 +123,6 @@ router.post("/mail", function(req, res){
         }
         //DB 정보가 없을경우.
         if(!results[0]){
-            //res.render("login", {pass: "fail"});
             res.json("no");
         }else{
             var user = results[0];
@@ -161,7 +159,7 @@ router.post("/mail", function(req, res){
 });
 
 
-//문의 API
+//HONGJUN : 제휴문의 API
 router.post("/question", function(req, res){
     var Name = req.body.getName;
     var Email = req.body.getEmail;
@@ -211,15 +209,10 @@ router.post("/question", function(req, res){
         }
     });
   
-    console.log("Name"+Name);
-    console.log("Email"+Email);
-    console.log("Phone"+Phone);
-    console.log("Message"+Message);
-  
 });
 
 
-//회원가입 API
+//HONGJUN : 회원가입 API
 router.post('/signup', function(req, res) {
     var id = req.body.inputID;
     var pw = req.body.inputPW;

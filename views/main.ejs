@@ -26,6 +26,7 @@
 
       <!-- Masthead Heading -->
       <h1 class="masthead-heading text-uppercase mb-0">Start Recipe</h1>
+      <!--HONGJUN : 세션값으로 회원 이름 표시-->
       <%if(session.name == null ){%>
      
       <%}else {%>
@@ -62,7 +63,7 @@
         <div class="divider-custom-line"></div>
       </div>
 
-      <!-- Portfolio Grid Items -->
+     <!--HONGJUN : 최근 6개 게시물 데이터 뿌려주기-->
       <div class="row">
         <%
         for(var i=0; i<(length) ; i++){
@@ -131,6 +132,7 @@
   </section>
 
   <!-- Contact Section -->
+  <!--HONGJUN : 제휴 문의 폼-->
   <section class="page-section" id="contact">
     <div class="container">
 
@@ -191,6 +193,7 @@
     </div>
   </section>
   <script>
+      //   HONGJUN : 제휴문의 API 호출
       $(document).ready(function () {
      
           $('#sendMessageButton_1').click(function(){
@@ -264,7 +267,7 @@
     var value =  unescape(replaceAll(rows[i].mainImg, "\\", "%"));
 
   %>
-  <!-- Portfolio Modal 1 -->
+  <!--HONGJUN :  최근 6개 게시물 데이터 모달 생성 -->
   <div class="portfolio-modal modal fade" id="portfolioModal<%=i%>" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document" style="width:50;top: 10%;">
       <div class="modal-content">

@@ -210,6 +210,7 @@
 				<label class="btn" for="open-pop" style="text-align: center;">비밀번호 찾기</label>
 			</div>
 			<!-- <input type="button" class="mail" value="메일전송" ></input> -->
+			<!-- HONGJUN : 비밀번호 찾기 모달-->
 			<input class="modal-state" id="open-pop" type="checkbox" />
 			<div class="modal">
 				<label class="modal_bg" for="open-pop"></label>
@@ -229,6 +230,7 @@
 			$('.join').click(function(){
 				location.href = "signup";
 			});
+			//HONGJUN : 비밀번호 찾기 API 호출
 			$('.mail').click(function(){
 				var getID    = document.getElementById("returnId").value;
            		var params=getID;  
