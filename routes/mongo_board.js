@@ -174,7 +174,7 @@ router.get('/read/:id', function(req, res, next) {
             if(err) res.status(500).json({error: 'failed to update'});
         });
         var rowUp;
-        boardUpVo.findOne({contentId:id+" ", userId:req.session.name}, function(err, row1){
+        boardUpVo.findOne({contentId:id+" ", userId:req.session.name}, function(err, row1){ //사용자가 한게시글당 한번추천을 위해 세션name값으로 조회하여 값전달
             if(err) return res.status(500).send({error: 'boardUp database failure'});
             console.log(row1+" //"+id + req.session.name);
             rowUp = row1;
@@ -183,7 +183,7 @@ router.get('/read/:id', function(req, res, next) {
 
         var replyRow;
        
-        replyVo.find({contentId : req.params.id+" "}, function(err, rows){
+        replyVo.find({contentId : req.params.id+" "}, function(err, rows){  //해당 게시글에 등록된 모든 댓글조회
             if(err) return res.status(500).send({error: 'replyVo database failure'});
            console.log(rows);
            console.log(rows.length);
@@ -308,15 +308,15 @@ router.get('/delete/:id', function(req, res, next) {
     });
 });
 
-router.post('/replywrite', function(req, res, next) {
+router.post('/replywrite', function(req, res, next) {   //replyVo를 통해 몽고DB에 댓글 저장
     var datas = new replyVo();
-    datas.userId = req.session.name;
-    datas.contentId = req.body.contentId;
-    datas.content = req.body.recpDtlConts;
+    datas.userId = req.session.name;    //사용자 이름
+    datas.contentId = req.body.contentId;   //게시글 ID
+    datas.content = req.body.recpDtlConts;  //댓글내용
 
     datas.save(function(err){
         if(err) return res.status(500).send({error: 'database failure = '+err});
-        res.send("<script>alert('저장되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");
+        res.send("<script>alert('저장되었습니다.'); location.href = '/mongo/read/"+datas.contentId+"';</script>");  //저장후 해당게시물로 이동
         // res.redirect('/mongo/page/1');
     });
 
