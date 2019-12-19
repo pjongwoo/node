@@ -117,47 +117,48 @@
                         <a class="btn btn-primary text-white" href="#" onclick="update();">수정</a>
                         <a class="btn btn-danger text-white" href="/mongo/delete/<%=row._id%>">글 삭제</a>
                     <% } else { %>
-                        <!-- JWCHEON: 신고 버튼 추가, Modal 버튼 구성 -->
+<!--                        <a class="btn btn-danger text-white" href="#" id="report_Button" data-toggle="modal" data-target="#reportModal">신고</a>-->
                         <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">신고</button>
                     <% } %>
                     <button type="button" class="btn btn-warning" onclick="location.href='/mongo/page/1'"><a style="font-weight: bold;color:#f8f9fa;text-decoration: none;"href="/mongo/page/1">목록</a></button>
-                    <% if(row1 == null || row1.userId != session.name){ %>
+                    <% if(row1 == null){ %><!-- 사용자 세션으로 조회해온값이 없을때만 추천가능-->
                         <a  class="btn btn-danger" style="font-weight: bold;color:#f8f9fa;text-decoration: none;" href="javascript:LikeForm.submit();">추천</a>
                     <%  } %>
                     <form name='LikeForm' id='LikeForm' action="/mongoup/write" method="POST">
-
+                        <!-- 추천시 필요한 게시글ID값지정-->
                         <input type='hidden' name='id' value='<%=row._id%>'/>
                     </form>
                 </div>
                 <div class="reply-wrapper">
                     <p><span>댓글 </span>
-                    <% if(reply!=null){ %>
-                    <span class="reply-cnt"><%=reply.length%></span>
+                    <% if(reply!=null){ %><!--댓글이 없을시엔 0을보여주고 1개라도 있을시에는 length를 보여줌-->
+                        <span class="reply-cnt"><%=reply.length%></span>
                     <% }else{ %>
                         <span class="reply-cnt">0</span>
 
                     <% } %>
                     <span>개</span></p>
-                    <form name='replyForm' id='replyForm' action="/mongo/replywrite" method="POST">
+                    <form name='replyForm' id='replyForm' action="/mongo/replywrite" method="POST"><!--게시글ID와 댓글내용을 폼에담아 전달-->
                         <input type='hidden' name='contentId' value='<%= row._id %> '/>
                         <div class="reply-input-wrapper">
                             <textarea class="reply-input-conts" rows="2" name="recpDtlConts" placeholder="무엇이 궁금하신가요? 댓글로 남겨주세요."></textarea>
                             <a class="reply-btn btn btn-primary text-white" href="javascript:replyForm.submit();">등록</a>
                         </div>
                     </form>
-                    <div>
-                    <% if(reply!=null){%>
-                        <% for(var i=0; i<reply.length ; i++){%>
-                            <div class="reply-group">
-                                <script>
-                                  
-                                </script>
-                                <span class="reply-name"><%= reply[i].userId %></span><span class="reply-date"><%= reply[i].regdate.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></span>
-                                <div class="reply-conts"><%= reply[i].content %></div>
-                            </div>
-                        <%  }  %>
-                    <%  }  %>
-                    </div>
+<div>
+<% if(reply!=null){%><!--게시글ID로 조회하여 댓글이 있을때만 보여줌-->
+    <% for(var i=0; i<reply.length ; i++){%>
+        <div class="reply-group">
+            <script>
+                
+            </script>
+            <span class="reply-name"><%= reply[i].userId %></span><span class="reply-date"><%= reply[i].regdate.toISOString().replace(/T/, ' ').replace(/\..+/, '') %>
+            </span>
+            <div class="reply-conts"><%= reply[i].content %></div>
+        </div>
+    <%  }  %>
+<%  }  %>
+</div>
                 </div>
             </div>
             <form action="/mongo/update" method="post" name="upForm" id="upForm" onsubmit="return onSubmit();" enctype="multipart/form-data">
@@ -296,18 +297,17 @@
         }
 
         $(function () {
-            // JWCHEON: 신고 버튼을 눌렀을 경우 실행되는 함수
             $('#report_Button').click( function () {
                 // alert($("#categoryLabel").text());
                 // alert($("#message-text").val());
-                $.ajax({    // JWCHEON: ajax를 통해 신고 데이터를 router를 전송
+                $.ajax({
                     url: '/report',
                     async: true,
-                    type: 'POST',   // JWCHEON: 신고 데이터를 저장하기 위해 POST로 전송
+                    type: 'POST',
                     data: {
-                        reportTitle: $("#categoryLabel").text(),    // JWCHEON: 신고 카테고리 text
-                        reportContents: $("#message-text").val(),   // JWCHEON: 신고 내용 value
-                        reportWriter: "<%=session.name%>",          // JWCHEON: 신고자(로그인 세션 이름 추출)
+                        reportTitle: $("#categoryLabel").text(),
+                        reportContents: $("#message-text").val(),
+                        reportWriter: "<%=session.name%>",
                         contentsId: "<%=row._id%>",
                         title: "<%=row.title%>",
                         writerName: "<%=row.name%>",
@@ -325,16 +325,16 @@
             })
         })
 
-        // JWCHEON: Modal javascript 구성
         $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var recipient = button.data('whatever')
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
             modal.find('.modal-title').text('New message to ' + recipient)
             modal.find('.modal-body input').val(recipient)
         })
 
-        // JWCHEON: Modal에서 신고 카테고리(드롭다운버튼)을 골랐을 경우 text 세팅
         var categoryArray = ['영리목적/홍보성', '불법정보', '음란성/선정성', '욕설/인신공격', '개인정보노출', '같은 내용의 반복 게시 (도배)', '기타']
         function clickedCategory(num) {
             $('#categoryLabel').text(categoryArray[num]);
@@ -342,7 +342,7 @@
     </script>
 </div>
 
-<!-- JWCHEON: 신고 모달 화면 구성 -->
+<!-- 신고 모달 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -380,7 +380,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                <!-- JWCHEON: id: report_Button을 통해 위에 등록해놓은 javascript 함수가 실행함 -->
                 <button type="button" class="btn btn-danger" id="report_Button" data-dismiss="modal">신고하기</button>
             </div>
         </div>
